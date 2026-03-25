@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="it" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Casa San Giacomo - Menù</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,600&family=Source+Sans+Pro:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #fcfbf9;
+            --text-main: #2c2c2c;
+            --text-muted: #666;
+            --accent-color: #cda873; 
+            --border-color: #eaeaea;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Source Sans Pro', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            transition: all 0.3s ease;
+        }
+
+        /* HEADER STICKY CON LOGO */
+        header {
+            background-color: #fff;
+            padding: 10px 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+
+        /* Dimensioni massime per l'immagine del logo nell'header */
+        .logo-img {
+            max-height: 40px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .lang-selector-wrapper { position: relative; }
+
+        select#lang-select {
+            appearance: none;
+            -webkit-appearance: none;
+            background-color: #fff;
+            border: 1px solid var(--border-color);
+            padding: 8px 35px 8px 15px;
+            border-radius: 25px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            color: var(--text-main);
+            cursor: pointer;
+            outline: none;
+            transition: border-color 0.3s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+        }
+
+        select#lang-select:focus, select#lang-select:hover { border-color: var(--accent-color); }
+
+        .lang-selector-wrapper::after {
+            content: "▼";
+            font-size: 0.7rem;
+            color: var(--accent-color);
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+        }
+
+        main {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        /* SEZIONE TITOLI PRINCIPALI */
+        .title-section {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        h1.restaurant-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            color: var(--text-main);
+            margin-bottom: 5px;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        h2.menu-subtitle {
+            font-family: 'Source Sans Pro', sans-serif;
+            font-size: 1.1rem;
+            color: var(--accent-color);
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            font-weight: 400;
+        }
+
+        h2.menu-subtitle::after {
+            content: '';
+            display: block;
+            width: 40px;
+            height: 2px;
+            background-color: var(--accent-color);
+            margin: 15px auto 0;
+        }
+
+        .category {
+            margin-bottom: 50px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 0.6s ease forwards;
+        }
+
+        .category-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: var(--accent-color);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .menu-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .item-details {
+            display: flex;
+            flex-grow: 1;
+            align-items: baseline;
+            position: relative;
+        }
+
+        .item-details::after {
+            content: '';
+            flex-grow: 1;
+            border-bottom: 1px dotted #ccc;
+            margin: 0 15px;
+            position: relative;
+            top: -4px;
+        }
+
+        .item-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+            max-width: 85%;
+            background-color: var(--bg-color);
+            padding-right: 5px;
+        }
+
+        .item-desc {
+            display: block;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-style: italic;
+            margin-top: -3px;
+            margin-bottom: 15px;
+        }
+
+        .item-price {
+            font-weight: 600;
+            font-size: 1.1rem;
+            white-space: nowrap;
+            background-color: var(--bg-color);
+            padding-left: 5px;
+            color: var(--accent-color);
+        }
+
+        .menu-footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            opacity: 0;
+            animation: fadeIn 1s ease 1s forwards; 
+        }
+
+        .menu-footer p { margin-bottom: 8px; }
+        .wifi-box { margin-top: 15px; padding: 10px; background-color: #fff; border: 1px dashed #ccc; display: inline-block; border-radius: 5px;}
+        .wifi-box strong { color: var(--accent-color); }
+
+        /* Supporto RTL per Ebraico e Persiano */
+        html[dir="rtl"] .item-name { padding-right: 0; padding-left: 5px; }
+        html[dir="rtl"] .item-price { padding-left: 0; padding-right: 5px; }
+        html[dir="rtl"] .lang-selector-wrapper::after { right: auto; left: 15px; }
+        html[dir="rtl"] select#lang-select { padding: 8px 15px 8px 35px; }
+
+        @keyframes fadeIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 600px) {
+            h1.restaurant-name { font-size: 2.5rem; }
+            h2.menu-subtitle { font-size: 0.9rem; letter-spacing: 2px; }
+            .category-title { font-size: 1.5rem; }
+            .item-name { font-size: 1rem; max-width: 75%; }
+            .item-price { font-size: 1rem; }
+            header { padding: 10px 15px; }
+            .logo-container span { display: none; } /* Su mobile nasconde il testo nell'header se c'è l'immagine per risparmiare spazio */
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-container">
+            <!-- SOSTITUISCI "tuo-logo.png" CON IL NOME ESATTO DELLA TUA IMMAGINE. -->
+            <!-- L'attributo onerror nasconde l'immagine se il file non viene trovato, lasciando solo il testo -->
+            <img src="tuo-logo.png" alt="Logo" class="logo-img" onerror="this.style.display='none'">
+            <span>Casa San Giacomo</span>
+        </div>
+        <div class="lang-selector-wrapper">
+            <select id="lang-select">
+                <option value="it">🇮🇹 Italiano</option>
+                <option value="en">🇬🇧 English</option>
+                <option value="es">🇪🇸 Español</option>
+                <option value="es-AR">🇦🇷 Español (Argentina)</option>
+                <option value="es-CL">🇨🇱 Español (Chile)</option>
+                <option value="fr">🇫🇷 Français</option>
+                <option value="de">🇩🇪 Deutsch</option>
+                <option value="nl">🇳🇱 Nederlands</option>
+                <option value="pt">🇵🇹 Português (PT)</option>
+                <option value="pt-BR">🇧🇷 Português (BR)</option>
+                <option value="fi">🇫🇮 Suomi</option>
+                <option value="ru">🇷🇺 Русский</option>
+                <option value="hi">🇮🇳 हिन्दी (Hindi)</option>
+                <option value="zh">🇨🇳 中文 (Cinese)</option>
+                <option value="ja">🇯🇵 日本語 (Giapponese)</option>
+                <option value="ko">🇰🇷 한국어 (Coreano)</option>
+                <option value="he">🇮🇱 עברית (Ebraico)</option>
+                <option value="fa">🇮🇷 فارسی (Persiano)</option>
+            </select>
+        </div>
+    </header>
+
+    <main>
+        <div class="title-section">
+            <h1 class="restaurant-name">Casa San Giacomo</h1>
+            <!-- Questo sottotitolo cambierà lingua (es. "Our Menu", "Notre Menu") -->
+            <h2 class="menu-subtitle" id="main-subtitle">Il Nostro Menù</h2>
+        </div>
+        
+        <div id="menu-container"></div>
+        <div id="footer-container"></div>
+    </main>
+
+    <script>
+        const menuData = {
+            "en": {
+                title: "Our Menu",
+                categories: [
+                    { name: "Starters", items: [
+                        { name: "Broad bean purée served with wild chicory, red onion", price: "€10" },
+                        { name: "Bruschetta of Altamura bread with stracciatella cheese, rocket, zucchini, cherry tomatoes", price: "€11" },
+                        { name: "Burrata cheese in tarallo basket with crispy capocollo, sun-dried tomato pesto", price: "€12" },
+                        { name: "Local meatballs and brasciola in tomato sauce", price: "€14" },
+                        { name: "Slow cooked Octopus with aubergine, basil mayo", price: "€15" },
+                        { name: "Local cheese platter with honey, jams, sliced local salami", price: "€15" }
+                    ]},
+                    { name: "Pastas", items: [
+                        { name: "Senator Cappelli “Orecchiette” with wild broccoli, fresh cherry tomatoes, anchovies, crispy bread", price: "€11" },
+                        { name: "Senator Cappelli “Maritati” pasta with brasciola in tomato sauce", price: "€14" },
+                        { name: "Senator Cappelli “Strascinate” pasta with olives, artichoke mousse, ricotta, almond", price: "€14" },
+                        { name: "Gnocchetti with peppers, local sausage, pecorino cream, crumbled tarallo", price: "€15" },
+                        { name: "Tagliolino pasta with octopus, yellow datterino tomato, sun-dried tomato, primitivo sauce", price: "€16" }
+                    ]},
+                    { name: "Mains", items: [
+                        { name: "\"Zampina\" Sausage with oven-baked potatoes or wild chicory", price: "€15" },
+                        { name: "Grilled \"bombette\" with oven-baked potatoes or wild chicory", price: "€16" },
+                        { name: "Sea bass fillet with “poverella” courgette", price: "€19" },
+                        { name: "Selection of local and special meats", price: "€/100gr" }
+                    ]},
+                    { name: "Side Dishes", items: [
+                        { name: "Baked potatoes", price: "€6" },
+                        { name: "Sautéed vegetables", price: "€6" },
+                        { name: "Gratin vegetables", price: "€6" },
+                        { name: "Smashed potato with melted caciocavallo cheese, capocollo, house sauce", price: "€7" }
+                    ]},
+                    { name: "Desserts", items: [
+                        { name: "Lime ricotta foam with crunchy almonds, lemon curd and red berries", price: "€7" },
+                        { name: "San Marzano Tiramisu", price: "€7" },
+                        { name: "Lemon pie with red berries", price: "€7" },
+                        { name: "Brownie with dulce de leche", price: "€7" },
+                        { name: "Artisanal semifreddo", price: "€7" }
+                    ]},
+                    { name: "Wines by the Glass", items: [
+                        { name: "Glass of local White Wine", desc: "(Verdeca · Malvasia)", price: "€6" },
+                        { name: "Glass of local Red Wine", desc: "(Primitivo · Negramaro · Susumaniello)", price: "€6" },
+                        { name: "Glass of Ostuni D.O.C Wine", desc: "(Ottavianello)", price: "€6" },
+                        { name: "Glass of local Rosè Wine", desc: "(Negramaro)", price: "€6" },
+                        { name: "Glass of local Sparkling Wine", desc: "(Vermentino)", price: "€6" }
+                    ]},
+                    { name: "Beers", items: [
+                        { name: "Nastro Azzurro Beer", price: "€4" },
+                        { name: "Nastro Azzurro Non alcoholic Beer", price: "€4.50" },
+                        { name: "Blonde Menabrea Beer", price: "€5" },
+                        { name: "Red Menabrea Beer", price: "€6" },
+                        { name: "Weiss Menabrea Beer", price: "€6" }
+                    ]},
+                    { name: "Soft Drinks", items: [
+                        { name: "Coca Cola 33cl", price: "€4" },
+                        { name: "Fanta 33cl", price: "€4" },
+                        { name: "Tonic Water", price: "€4" },
+                        { name: "Lemonsoda", price: "€4" },
+                        { name: "Orange juice", price: "€4" },
+                        { name: "Water", price: "€3" }
+                    ]},
+                    { name: "Cocktails & Spirits", items: [
+                        { name: "Spritz (Aperol or Campari)", price: "€8" },
+                        { name: "Hugo", price: "€8" },
+                        { name: "Limoncello Spritz", price: "€8" },
+                        { name: "Espresso Martini", price: "€8" },
+                        { name: "Negroni", price: "€8" },
+                        { name: "Negroni Sbagliato", price: "€8" },
+                        { name: "Americano", price: "€8" },
+                        { name: "Gin Tonic", desc: "*Gin: Tanqueray, Gin Mare, Bombay, Hendrick’s & Gin Locale", price: "€8/15" },
+                        { name: "Gin Lemon", desc: "*Gin: Tanqueray, Gin Mare, Bombay, Hendrick’s & Gin Locale", price: "€8/15" },
+                        { name: "Vodka Tonic", desc: "*Vodka: Moskovskaya, Belvedere & Grey Goose", price: "€8/12" },
+                        { name: "Vodka Lemon", desc: "*Vodka: Moskovskaya, Belvedere & Grey Goose", price: "€8/12" },
+                        { name: "Rum & Cola", price: "€8/12" }
+                    ]}
+                ],
+                info: { cover: "Cover charge €3", allergy: "Please inform the staff of any allergies" }
+            },
+            "it": {
+                title: "Il Nostro Menù",
+                categories: [
+                    { name: "Antipasti", items: [
+                        { name: "Purea di fave con cicoria selvatica e cipolla rossa", price: "€10" },
+                        { name: "Bruschetta di pane di Altamura con stracciatella, rucola, zucchine, pomodorini", price: "€11" },
+                        { name: "Burrata in crosta di tarallo con capocollo croccante e pesto di pomodori secchi", price: "€12" },
+                        { name: "Polpette e brasciola di carni locali al sugo", price: "€14" },
+                        { name: "Polpo a cottura lenta con melanzane e maionese al basilico", price: "€15" },
+                        { name: "Tagliere di formaggi locali con miele, confetture e salumi locali a fette", price: "€15" }
+                    ]},
+                    { name: "Primi", items: [
+                        { name: "Orecchiette Senatore Cappelli ai broccoletti selvatici, pomodorini freschi, acciughe e pane croccante", price: "€11" },
+                        { name: "Maritati Senatore Cappelli al sugo con brasciola", price: "€14" },
+                        { name: "Strascinate Senatore Cappelli con olive, spuma di carciofi, ricotta e mandorle", price: "€14" },
+                        { name: "Gnocchetti con peperoni, salsiccia locale, crema di pecorino e tarallo sbriciolato", price: "€15" },
+                        { name: "Tagliolino con polpo, datterino giallo, pomodoro secco e riduzione di primitivo", price: "€16" }
+                    ]},
+                    { name: "Secondi", items: [
+                        { name: "Salsiccia \"zampina\" con patate al forno o cicoria selvatica", price: "€15" },
+                        { name: "Bombette alla brace con patate al forno o cicoria selvatica", price: "€16" },
+                        { name: "Filetto di branzino con zucchine alla \"poverella\"", price: "€19" },
+                        { name: "Selezione di carni rosse locali e speciali", price: "€/all'etto" }
+                    ]},
+                    { name: "Contorni", items: [
+                        { name: "Patate al forno", price: "€6" },
+                        { name: "Verdure saltate in padella", price: "€6" },
+                        { name: "Verdure gratinate", price: "€6" },
+                        { name: "Schiacciata di patate con caciocavallo fuso, capocollo, salsa della casa", price: "€7" }
+                    ]},
+                    { name: "Dolci", items: [
+                        { name: "Spuma di ricotta al lime con mandorle croccanti, lemon curd e frutti rossi", price: "€7" },
+                        { name: "Tiramisù al San Marzano", price: "€7" },
+                        { name: "Lemon pie con frutti rossi", price: "€7" },
+                        { name: "Brownie con dulce de leche", price: "€7" },
+                        { name: "Semifreddo artigianale", price: "€7" }
+                    ]},
+                    { name: "Vini al Calice", items: [
+                        { name: "Calice di Vino Bianco Locale", desc: "(Verdeca · Malvasia)", price: "€6" },
+                        { name: "Calice di Vino Rosso Locale", desc: "(Primitivo · Negramaro · Susumaniello)", price: "€6" },
+                        { name: "Calice di Vino D.O.C. Ostuni", desc: "(Ottavianello)", price: "€6" },
+                        { name: "Calice di Vino Rosato Locale", desc: "(Negramaro)", price: "€6" },
+                        { name: "Calice di Spumante Locale", desc: "(Vermentino)", price: "€6" }
+                    ]},
+                    { name: "Birre", items: [
+                        { name: "Birra Nastro Azzurro", price: "€4" },
+                        { name: "Birra Nastro Azzurro Analcolica", price: "€4,50" },
+                        { name: "Birra Menabrea Bionda", price: "€5" },
+                        { name: "Birra Menabrea Rossa", price: "€6" },
+                        { name: "Birra Menabrea Weiss", price: "€6" }
+                    ]},
+                    { name: "Bevande", items: [
+                        { name: "Coca Cola 33cl", price: "€4" },
+                        { name: "Fanta 33cl", price: "€4" },
+                        { name: "Acqua Tonica", price: "€4" },
+                        { name: "Lemonsoda", price: "€4" },
+                        { name: "Succo d'arancia", price: "€4" },
+                        { name: "Acqua", price: "€3" }
+                    ]},
+                    { name: "Cocktail e Spiriti", items: [
+                        { name: "Spritz (Aperol o Campari)", price: "€8" },
+                        { name: "Hugo", price: "€8" },
+                        { name: "Limoncello Spritz", price: "€8" },
+                        { name: "Espresso Martini", price: "€8" },
+                        { name: "Negroni", price: "€8" },
+                        { name: "Negroni Sbagliato", price: "€8" },
+                        { name: "Americano", price: "€8" },
+                        { name: "Gin Tonic", desc: "*Gin: Tanqueray, Gin Mare, Bombay, Hendrick’s & Gin Locale", price: "€8/15" },
+                        { name: "Gin Lemon", desc: "*Gin: Tanqueray, Gin Mare, Bombay, Hendrick’s & Gin Locale", price: "€8/15" },
+                        { name: "Vodka Tonic", desc: "*Vodka: Moskovskaya, Belvedere & Grey Goose", price: "€8/12" },
+                        { name: "Vodka Lemon", desc: "*Vodka: Moskovskaya, Belvedere & Grey Goose", price: "€8/12" },
+                        { name: "Rum & Cola", price: "€8/12" }
+                    ]}
+                ],
+                info: { cover: "Coperto €3", allergy: "Si prega di informare il personale di eventuali allergie o intolleranze" }
+            },
+            "es": { 
+                title: "Nuestro Menú",
+                categories: [
+                    { name: "Entrantes", items: [
+                        { name: "Puré de habas con achicoria silvestre y cebolla roja", price: "€10" },
+                        { name: "Bruschetta de pan de Altamura con stracciatella, rúcula, calabacín, tomates cherry", price: "€11" },
+                        { name: "Burrata en costra de tarallo con capocollo crujiente y pesto de tomates secos", price: "€12" },
+                        { name: "Albóndigas y brasciola locales en salsa de tomate", price: "€14" },
+                        { name: "Pulpo cocinado a fuego lento con berenjenas y mayonesa de albahaca", price: "€15" },
+                        { name: "Tabla de quesos locales con miel, mermeladas y salami local", price: "€15" }
+                    ]},
+                    { name: "Pastas", items: [
+                        { name: "Orecchiette Senatore Cappelli con brócoli silvestre, tomatitos, anchoas y pan crujiente", price: "€11" },
+                        { name: "Pasta Maritati Senatore Cappelli en salsa con brasciola", price: "€14" },
+                        { name: "Pasta Strascinate Senatore Cappelli con aceitunas, mousse de alcachofa, ricotta y almendras", price: "€14" },
+                        { name: "Ñoquis con pimientos, salchicha local, crema de pecorino y tarallo desmenuzado", price: "€15" },
+                        { name: "Tagliolino con pulpo, tomate datterino amarillo, tomate seco y salsa de primitivo", price: "€16" }
+                    ]},
+                    { name: "Platos Principales", items: [
+                        { name: "Salchicha \"zampina\" con papas al horno o achicoria silvestre", price: "€15" },
+                        { name: "Bombette a la brasa con papas al horno o achicoria silvestre", price: "€16" },
+                        { name: "Filete de lubina con calabacines \"poverella\"", price: "€19" },
+                        { name: "Selección de carnes rojas locales y especiales", price: "€/100gr" }
+                    ]},
+                    { name: "Guarniciones", items: [
+                        { name: "Papas al horno", price: "€6" },
+                        { name: "Verduras salteadas", price: "€6" },
+                        { name: "Verduras gratinadas", price: "€6" },
+                        { name: "Papa machacada con queso caciocavallo derretido, capocollo, salsa de la casa", price: "€7" }
+                    ]},
+                    { name: "Postres", items: [
+                        { name: "Espuma de ricotta a la lima con almendras, lemon curd y frutos rojos", price: "€7" },
+                        { name: "Tiramisú al San Marzano", price: "€7" },
+                        { name: "Lemon pie con frutos rojos", price: "€7" },
+                        { name: "Brownie con dulce de leche", price: "€7" },
+                        { name: "Semifrío artesanal", price: "€7" }
+                    ]},
+                    { name: "Vinos por Copa", items: [
+                        { name: "Copa de Vino Blanco Local", desc: "(Verdeca · Malvasia)", price: "€6" },
+                        { name: "Copa de Vino Tinto Local", desc: "(Primitivo · Negramaro · Susumaniello)", price: "€6" },
+                        { name: "Copa de Vino D.O.C. Ostuni", desc: "(Ottavianello)", price: "€6" },
+                        { name: "Copa de Vino Rosado Local", desc: "(Negramaro)", price: "€6" },
+                        { name: "Copa de Espumoso Local", desc: "(Vermentino)", price: "€6" }
+                    ]},
+                    { name: "Cervezas", items: [
+                        { name: "Cerveza Nastro Azzurro", price: "€4" },
+                        { name: "Cerveza Nastro Azzurro Sin Alcohol", price: "€4,50" },
+                        { name: "Cerveza Menabrea Rubia", price: "€5" },
+                        { name: "Cerveza Menabrea Roja", price: "€6" },
+                        { name: "Cerveza Menabrea Weiss (Trigo)", price: "€6" }
+                    ]},
+                    { name: "Bebidas", items: [
+                        { name: "Coca Cola 33cl", price: "€4" },
+                        { name: "Fanta 33cl", price: "€4" },
+                        { name: "Agua Tónica", price: "€4" },
+                        { name: "Lemonsoda", price: "€4" },
+                        { name: "Zumo de naranja", price: "€4" },
+                        { name: "Agua", price: "€3" }
+                    ]},
+                    { name: "Cócteles y Licores", items: [
+                        { name: "Spritz (Aperol o Campari)", price: "€8" },
+                        { name: "Hugo", price: "€8" },
+                        { name: "Limoncello Spritz", price: "€8" },
+                        { name: "Espresso Martini", price: "€8" },
+                        { name: "Negroni", price: "€8" },
+                        { name: "Negroni Sbagliato", price: "€8" },
+                        { name: "Americano", price: "€8" },
+                        { name: "Gin Tonic", desc: "*Gin: Tanqueray, Gin Mare, Bombay, Hendrick’s & Gin Locale", price: "€8/15" },
+                        { name: "Gin Lemon", desc: "*Gin: Tanqueray, Gin Mare, Bombay, Hendrick’s & Gin Locale", price: "€8/15" },
+                        { name: "Vodka Tonic", desc: "*Vodka: Moskovskaya, Belvedere & Grey Goose", price: "€8/12" },
+                        { name: "Vodka Lemon", desc: "*Vodka: Moskovskaya, Belvedere & Grey Goose", price: "€8/12" },
+                        { name: "Ron y Cola", price: "€8/12" }
+                    ]}
+                ],
+                info: { cover: "Cubierto €3", allergy: "Por favor, informe al personal de cualquier alergia" }
+            },
+            "fr": {
+                title: "Notre Menu",
+                categories: [
+                    { name: "Entrées", items: [
+                        { name: "Purée de fèves, chicorée sauvage, oignon rouge", price: "€10" },
+                        { name: "Bruschetta de pain d'Altamura, stracciatella, roquette, courgette, tomates cerises", price: "€11" },
+                        { name: "Burrata en croûte de tarallo, capocollo croustillant, pesto de tomates séchées", price: "€12" },
+                        { name: "Boulettes et brasciola locales en sauce tomate", price: "€14" },
+                        { name: "Poulpe cuit lentement, aubergines, mayonnaise au basilic", price: "€15" },
+                        { name: "Assiette de fromages locaux, miel, confitures, charcuteries locales", price: "€15" }
+                    ]},
+                    { name: "Pâtes", items: [
+                        { name: "Orecchiette Senatore Cappelli, brocolis sauvages, tomates cerises, anchois, pain croustillant", price: "€11" },
+                        { name: "Pâtes Maritati Senatore Cappelli en sauce avec brasciola", price: "€14" },
+                        { name: "Pâtes Strascinate Senatore Cappelli, olives, mousse d'artichaut, ricotta, amande", price: "€14" },
+                        { name: "Gnocchetti, poivrons, saucisse locale, crème de pecorino, tarallo émietté", price: "€15" },
+                        { name: "Tagliolino au poulpe, tomate datterino jaune, tomate séchée, sauce au primitivo", price: "€16" }
+                    ]},
+                    { name: "Plats Principaux", items: [
+                        { name: "Saucisse \"Zampina\", pommes de terre au four ou chicorée sauvage", price: "€15" },
+                        { name: "Bombette grillées, pommes de terre au four ou chicorée sauvage", price: "€16" },
+                        { name: "Filet de bar, courgettes \"poverella\"", price: "€19" },
+                        { name: "Sélection de viandes rouges locales", price: "€/100gr" }
+                    ]},
+                    { name: "Accompagnements", items: [
+                        { name: "Pommes de terre au four", price: "€6" },
+                        { name: "Légumes sautés", price: "€6" },
+                        { name: "Légumes gratinés", price: "€6" },
+                        { name: "Écrasé de pommes de terre, caciocavallo fondu, capocollo, sauce maison", price: "€7" }
+                    ]},
+                    { name: "Desserts", items: [
+                        { name: "Mousse de ricotta au citron vert, amandes, lemon curd, fruits rouges", price: "€7" },
+                        { name: "Tiramisu au San Marzano", price: "€7" },
+                        { name: "Tarte au citron, fruits rouges", price: "€7" },
+                        { name: "Brownie au dulce de leche", price: "€7" },
+                        { name: "Semifreddo artisanal", price: "€7" }
+                    ]},
+                    { name: "Vins au Verre", items: [
+                        { name: "Verre de Vin Blanc Local", desc: "(Verdeca · Malvasia)", price: "€6" },
+                        { name: "Verre de Vin Rouge Local", desc: "(Primitivo · Negramaro · Susumaniello)", price: "€6" },
+                        { name: "Verre de Vin D.O.C. Ostuni", desc: "(Ottavianello)", price: "€6" },
+                        { name: "Verre de Vin Rosé Local", desc: "(Negramaro)", price: "€6" },
+                        { name: "Verre de Vin Mousseux Local", desc: "(Vermentino)", price: "€6" }
+                    ]},
+                    { name: "Bières", items: [
+                        { name: "Bière Nastro Azzurro", price: "€4" },
+                        { name: "Bière Nastro Azzurro Sans Alcool", price: "€4,50" },
+                        { name: "Bière Menabrea Blonde", price: "€5" },
+                        { name: "Bière Menabrea Rousse", price: "€6" },
+                        { name: "Bière Menabrea Weiss", price: "€6" }
+                    ]},
+                    { name: "Boissons", items: [
+                        { name: "Coca Cola 33cl", price: "€4" },
+                        { name: "Fanta 33cl", price: "€4" },
+                        { name: "Eau Tonique", price: "€4" },
+                        { name: "Lemonsoda", price: "€4" },
+                        { name: "Jus d'orange", price: "€4" },
+                        { name: "Eau", price: "€3" }
+                    ]},
+                    { name: "Cocktails & Spiritueux", items: [
+                        { name: "Spritz (Aperol ou Campari)", price: "€8" },
+                        { name: "Hugo", price: "€8" },
+                        { name: "Limoncello Spritz", price: "€8" },
+                        { name: "Espresso Martini", price: "€8" },
+                        { name: "Negroni", price: "€8" },
+                        { name: "Negroni Sbagliato", price: "€8" },
+                        { name: "Americano", price: "€8" },
+                        { name: "Gin Tonic", desc: "*Gin: Tanqueray, Gin Mare, Bombay, Hendrick’s & Gin Locale", price: "€8/15" },
+                        { name: "Gin Lemon", desc: "*Gin: Tanqueray, Gin Mare, Bombay, Hendrick’s & Gin Locale", price: "€8/15" },
+                        { name: "Vodka Tonic", desc: "*Vodka: Moskovskaya, Belvedere & Grey Goose", price: "€8/12" },
+                        { name: "Vodka Lemon", desc: "*Vodka: Moskovskaya, Belvedere & Grey Goose", price: "€8/12" },
+                        { name: "Rhum & Cola", price: "€8/12" }
+                    ]}
+                ],
+                info: { cover: "Couvert €3", allergy: "Veuillez informer le personnel de toute allergie" }
+            },
+            "de": {
+                title: "Unser Menü",
+                categories: [
+                    { name: "Vorspeisen", items: [
+                        { name: "Ackerbohnenpüree mit wilder Zichorie und roter Zwiebel", price: "€10" },
+                        { name: "Bruschetta (Altamura-Brot) mit Stracciatella, Rucola, Zucchini, Kirschtomaten", price: "€11" },
+                        { name: "Burrata in Tarallo-Kruste mit knusprigem Capocollo und Tomatenpesto", price: "€12" },
+                        { name: "Lokale Fleischbällchen und Brasciola in Tomatensauce", price: "€14" },
+                        { name: "Langsam gegarter Oktopus mit Auberginen, Basilikum-Mayo", price: "€15" },
+                        { name: "Lokale Käseplatte mit Honig, Marmeladen, lokaler Salami", price: "€15" }
+                    ]},
+                    { name: "Pasta", items: [
+                        { name: "Orecchiette mit wildem Brokkoli, Kirschtomaten, Sardellen, knusprigem Brot", price: "€11" },
+                        { name: "Maritati-Pasta mit Brasciola in Tomatensauce", price: "€14" },
+                        { name: "Strascinate-Pasta mit Oliven, Artischockenmousse, Ricotta, Mandeln", price: "€14" },
+                        { name: "Gnocchetti mit Paprika, lokaler Wurst, Pecorino-Creme, zerbröseltem Tarallo", price: "€15" },
+                        { name: "Tagliolino-Pasta mit Oktopus, gelben Datterini-Tomaten, Primitivo-Sauce", price: "€16" }
+                    ]},
+                    { name: "Hauptgerichte", items: [
+                        { name: "\"Zampina\" Wurst mit Ofenkartoffeln oder wilder Zichorie", price: "€15" },
+                        { name: "Gegrillte \"Bombette\" mit Ofenkartoffeln oder wilder Zichorie", price: "€16" },
+                        { name: "Wolfsbarschfilet mit \"poverella\" Zucchini", price: "€19" },
+                        { name: "Auswahl an lokalem rotem Fleisch", price: "€/100gr" }
+                    ]},
+                    { name: "Beilagen", items: [
+                        { name: "Ofenkartoffeln", price: "€6" },
+                        { name: "Sautiertes Gemüse", price: "€6" },
+                        { name: "Überbackenes Gemüse", price: "€6" },
+                        { name: "Kartoffelstampf mit geschmolzenem Caciocavallo, Capocollo, Haussauce", price: "€7" }
+                    ]},
+                    { name: "Desserts", items: [
+                        { name: "Limetten-Ricotta-Schaum mit Mandeln, Lemon Curd, roten Früchten", price: "€7" },
+                        { name: "San Marzano Tiramisu", price: "€7" },
+                        { name: "Zitronenkuchen mit roten Früchten", price: "€7" },
+                        { name: "Brownie mit Dulce de Leche", price: "€7" },
+                        { name: "Hausgemachtes Semifreddo", price: "€7" }
+                    ]},
+                    { name: "Offene Weine", items: [
+                        { name: "Glas lokaler Weißwein", desc: "(Verdeca · Malvasia)", price: "€6" },
+                        { name: "Glas lokaler Rotwein", desc: "(Primitivo · Negramaro · Susumaniello)", price: "€6" },
+                        { name: "Glas Ostuni D.O.C Wein", desc: "(Ottavianello)", price: "€6" },
+                        { name: "Glas lokaler Roséwein", desc: "(Negramaro)", price: "€6" },
+                        { name: "Glas lokaler Sekt", desc: "(Vermentino)", price: "€6" }
+                    ]},
+                    { name: "Biere", items: [
+                        { name: "Nastro Azzurro Bier", price: "€4" },
+                        { name: "Nastro Azzurro Alkoholfreies Bier", price: "€4,50" },
+                        { name: "Menabrea Helles Bier", price: "€5" },
+                        { name: "Menabrea Rotes Bier", price: "€6" },
+                        { name: "Menabrea Weissbier", price: "€6" }
+                    ]},
+                    { name: "Getränke", items: [
+                        { name: "Coca Cola 33cl", price: "€4" },
+                        { name: "Fanta 33cl", price: "€4" },
+                        { name: "Tonic Water", price: "€4" },
+                        { name: "Lemonsoda", price: "€4" },
+                        { name: "Orangensaft", price: "€4" },
+                        { name: "Wasser", price: "€3" }
+                    ]},
+                    { name: "Cocktails & Spirituosen", items: [
+                        { name: "Spritz (Aperol oder Campari)", price: "€8" },
+                        { name: "Hugo", price: "€8" },
+                        { name: "Limoncello Spritz", price: "€8" },
+                        { name: "Espresso Martini", price: "€8" },
+                        { name: "Negroni", price: "€8" },
+                        { name: "Negroni Sbagliato", price: "€8" },
+                        { name: "Americano", price: "€8" },
+                        { name: "Gin Tonic", desc: "*Gin: Tanqueray, Gin Mare, Bombay, Hendrick’s & Gin Locale", price: "€8/15" },
+                        { name: "Gin Lemon", desc: "*Gin: Tanqueray, Gin Mare, Bombay, Hendrick’s & Gin Locale", price: "€8/15" },
+                        { name: "Vodka Tonic", desc: "*Vodka: Moskovskaya, Belvedere & Grey Goose", price: "€8/12" },
+                        { name: "Vodka Lemon", desc: "*Vodka: Moskovskaya, Belvedere & Grey Goose", price: "€8/12" },
+                        { name: "Rum & Cola", price: "€8/12" }
+                    ]}
+                ],
+                info: { cover: "Gedeck €3", allergy: "Bitte informieren Sie das Personal über Allergien" }
+            }
+        };
+
+        // Cloniamo la lingua inglese per le altre lingue del selettore
+        const langsToClone = ['es-AR','es-CL','nl','pt','pt-BR','fi','ru','hi','zh','ja','ko','he','fa'];
+        langsToClone.forEach(l => {
+            menuData[l] = JSON.parse(JSON.stringify(menuData['en'])); 
+            if(l==='he') menuData[l].title = "התפריט שלנו (English)";
+            if(l==='fa') menuData[l].title = "منوی ما (English)";
+        });
+
+        function renderMenu(lang) {
+            const data = menuData[lang] || menuData['en']; 
+            
+            // Aggiorna titolo della scheda e sottotitolo principale
+            document.title = "Casa San Giacomo - " + data.title;
+            document.getElementById('main-subtitle').textContent = data.title;
+            
+            const container = document.getElementById('menu-container');
+            const footerContainer = document.getElementById('footer-container');
+            container.innerHTML = '';
+            footerContainer.innerHTML = '';
+
+            data.categories.forEach((category, index) => {
+                const categoryDiv = document.createElement('div');
+                categoryDiv.className = 'category';
+                categoryDiv.style.animationDelay = `${index * 0.15}s`; 
+
+                const catTitle = document.createElement('h2');
+                catTitle.className = 'category-title';
+                catTitle.textContent = category.name;
+                categoryDiv.appendChild(catTitle);
+
+                category.items.forEach(item => {
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = 'menu-item';
+
+                    const itemDetails = document.createElement('div');
+                    itemDetails.className = 'item-details';
+
+                    const textContainer = document.createElement('div');
+                    
+                    const itemName = document.createElement('span');
+                    itemName.className = 'item-name';
+                    itemName.textContent = item.name;
+                    textContainer.appendChild(itemName);
+
+                    if (item.desc) {
+                        const itemDesc = document.createElement('span');
+                        itemDesc.className = 'item-desc';
+                        itemDesc.textContent = item.desc;
+                        textContainer.appendChild(itemDesc);
+                    }
+
+                    itemDetails.appendChild(textContainer);
+                    itemDiv.appendChild(itemDetails);
+
+                    if (item.price) {
+                        const itemPrice = document.createElement('span');
+                        itemPrice.className = 'item-price';
+                        itemPrice.textContent = item.price;
+                        itemDiv.appendChild(itemPrice);
+                    }
+
+                    categoryDiv.appendChild(itemDiv);
+                });
+
+                container.appendChild(categoryDiv);
+            });
+
+            if(data.info) {
+                const footerHTML = `
+                    <div class="menu-footer">
+                        <p>${data.info.cover}</p>
+                        <p><em>${data.info.allergy}</em></p>
+                        <div class="wifi-box">
+                            Wi-Fi Password: <strong>bixio456</strong>
+                        </div>
+                    </div>
+                `;
+                footerContainer.innerHTML = footerHTML;
+            }
+
+            const isRTL = lang === 'he' || lang === 'fa';
+            document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
+            document.documentElement.lang = lang;
+            document.getElementById('lang-select').value = lang;
+        }
+
+        function getInitialLanguage() {
+            const savedLang = localStorage.getItem('appLang');
+            if (savedLang && menuData[savedLang]) return savedLang;
+            const browserLangFull = navigator.language; 
+            const browserLangShort = browserLangFull.substring(0, 2).toLowerCase(); 
+            if (menuData[browserLangFull]) return browserLangFull;
+            if (menuData[browserLangShort]) return browserLangShort;
+            return 'it';
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const initialLang = getInitialLanguage();
+            renderMenu(initialLang);
+
+            document.getElementById('lang-select').addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('appLang', selectedLang);
+                renderMenu(selectedLang);
+            });
+        });
+    </script>
+</body>
+</html>
