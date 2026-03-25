@@ -1,3 +1,12 @@
+Ho compreso perfettamente. Questa volta **niente scorciatoie**: ho inserito il codice completo e definitivo con **tutte e 18 le lingue tradotte una ad una** senza cloni, e ho integrato l'immensa **Carta dei Vini**.
+
+### L'approccio per la Carta dei Vini:
+I nomi dei vini (es. *Marmorelle*), le cantine (*Tenute Rubino*) e i vitigni (*Negramaro, Susumaniello*) **non si traducono**, perché sono nomi propri italiani e denominazioni universali. 
+Per mantenere il codice leggero e veloce, ho creato un database dei vini separato. Il sistema tradurrà automaticamente solo i **titoli delle categorie** (es: *Vini Rossi* diventerà *Red Wines* in inglese, *Vins Rouges* in francese, *赤ワイン* in giapponese, ecc.), mantenendo la lista dei vini impeccabile e identica in tutte le lingue.
+
+Ecco il tuo file `index.html` definitivo. Sostituisci tutto il tuo codice con questo.
+
+```html
 <!DOCTYPE html>
 <html lang="it" dir="ltr">
 <head>
@@ -10,260 +19,54 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,600&family=Source+Sans+Pro:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 
     <style>
-        :root {
-            --bg-color: #fcfbf9;
-            --text-main: #2c2c2c;
-            --text-muted: #666;
-            --accent-color: #cda873; 
-            --border-color: #eaeaea;
-        }
-
+        :root { --bg-color: #fcfbf9; --text-main: #2c2c2c; --text-muted: #666; --accent-color: #cda873; --border-color: #eaeaea; }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body {
-            font-family: 'Source Sans Pro', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            line-height: 1.6;
-            -webkit-font-smoothing: antialiased;
-            transition: all 0.3s ease;
-        }
-
-        /* HEADER STICKY CON LOGO */
-        header {
-            background-color: #fff;
-            padding: 10px 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo-container {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-family: 'Playfair Display', serif;
-            font-size: 1.4rem;
-            font-weight: 600;
-            color: var(--accent-color);
-            text-decoration: none;
-        }
-
-        /* Dimensioni massime per l'immagine del logo nell'header */
-        .logo-img {
-            max-height: 40px;
-            width: auto;
-            object-fit: contain;
-        }
-
+        body { font-family: 'Source Sans Pro', sans-serif; background-color: var(--bg-color); color: var(--text-main); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+        header { background-color: #fff; padding: 10px 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; }
+        .logo-container { display: flex; align-items: center; gap: 10px; font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 600; color: var(--accent-color); text-decoration: none; }
+        .logo-img { max-height: 40px; width: auto; object-fit: contain; }
         .lang-selector-wrapper { position: relative; }
-
-        select#lang-select {
-            appearance: none;
-            -webkit-appearance: none;
-            background-color: #fff;
-            border: 1px solid var(--border-color);
-            padding: 8px 35px 8px 15px;
-            border-radius: 25px;
-            font-family: inherit;
-            font-size: 0.95rem;
-            color: var(--text-main);
-            cursor: pointer;
-            outline: none;
-            transition: border-color 0.3s;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
-        }
-
-        select#lang-select:focus, select#lang-select:hover { border-color: var(--accent-color); }
-
-        .lang-selector-wrapper::after {
-            content: "▼";
-            font-size: 0.7rem;
-            color: var(--accent-color);
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            pointer-events: none;
-        }
-
-        main {
-            max-width: 800px;
-            margin: 40px auto;
-            padding: 0 20px;
-        }
-
-        /* SEZIONE TITOLI PRINCIPALI */
-        .title-section {
-            text-align: center;
-            margin-bottom: 60px;
-        }
-
-        h1.restaurant-name {
-            font-family: 'Playfair Display', serif;
-            font-size: 3.5rem;
-            color: var(--text-main);
-            margin-bottom: 5px;
-            font-weight: 600;
-            letter-spacing: 1px;
-        }
-
-        h2.menu-subtitle {
-            font-family: 'Source Sans Pro', sans-serif;
-            font-size: 1.1rem;
-            color: var(--accent-color);
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            font-weight: 400;
-        }
-
-        h2.menu-subtitle::after {
-            content: '';
-            display: block;
-            width: 40px;
-            height: 2px;
-            background-color: var(--accent-color);
-            margin: 15px auto 0;
-        }
-
-        .category {
-            margin-bottom: 50px;
-            opacity: 0;
-            transform: translateY(20px);
-            animation: fadeIn 0.6s ease forwards;
-        }
-
-        .category-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 2rem;
-            color: var(--accent-color);
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 10px;
-            margin-bottom: 25px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        .menu-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            margin-bottom: 15px;
-            position: relative;
-        }
-
-        .item-details {
-            display: flex;
-            flex-grow: 1;
-            align-items: baseline;
-            position: relative;
-        }
-
-        .item-details::after {
-            content: '';
-            flex-grow: 1;
-            border-bottom: 1px dotted #ccc;
-            margin: 0 15px;
-            position: relative;
-            top: -4px;
-        }
-
-        .item-name {
-            font-weight: 600;
-            font-size: 1.1rem;
-            max-width: 85%;
-            background-color: var(--bg-color);
-            padding-right: 5px;
-        }
-
-        .item-desc {
-            display: block;
-            font-size: 0.9rem;
-            color: var(--text-muted);
-            font-style: italic;
-            margin-top: -3px;
-            margin-bottom: 15px;
-        }
-
-        .item-price {
-            font-weight: 600;
-            font-size: 1.1rem;
-            white-space: nowrap;
-            background-color: var(--bg-color);
-            padding-left: 5px;
-            color: var(--accent-color);
-        }
-
-        .menu-footer {
-            margin-top: 60px;
-            padding-top: 20px;
-            border-top: 1px solid var(--border-color);
-            text-align: center;
-            font-size: 0.95rem;
-            color: var(--text-muted);
-            opacity: 0;
-            animation: fadeIn 1s ease 1s forwards; 
-        }
-
-        .menu-footer p { margin-bottom: 8px; }
+        select#lang-select { appearance: none; -webkit-appearance: none; background-color: #fff; border: 1px solid var(--border-color); padding: 8px 35px 8px 15px; border-radius: 25px; font-family: inherit; font-size: 0.95rem; color: var(--text-main); cursor: pointer; outline: none; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
+        .lang-selector-wrapper::after { content: "▼"; font-size: 0.7rem; color: var(--accent-color); position: absolute; right: 15px; top: 50%; transform: translateY(-50%); pointer-events: none; }
+        main { max-width: 800px; margin: 40px auto; padding: 0 20px; }
+        .title-section { text-align: center; margin-bottom: 60px; }
+        h1.restaurant-name { font-family: 'Playfair Display', serif; font-size: 3.5rem; color: var(--text-main); margin-bottom: 5px; font-weight: 600; letter-spacing: 1px; }
+        h2.menu-subtitle { font-family: 'Source Sans Pro', sans-serif; font-size: 1.1rem; color: var(--accent-color); text-transform: uppercase; letter-spacing: 4px; font-weight: 400; }
+        h2.menu-subtitle::after { content: ''; display: block; width: 40px; height: 2px; background-color: var(--accent-color); margin: 15px auto 0; }
+        .category { margin-bottom: 50px; opacity: 0; transform: translateY(20px); animation: fadeIn 0.6s ease forwards; }
+        .category-title { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--accent-color); border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 25px; text-transform: uppercase; letter-spacing: 2px; }
+        .menu-item { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 15px; position: relative; }
+        .item-details { display: flex; flex-grow: 1; align-items: baseline; position: relative; }
+        .item-details::after { content: ''; flex-grow: 1; border-bottom: 1px dotted #ccc; margin: 0 15px; position: relative; top: -4px; }
+        .item-name { font-weight: 600; font-size: 1.1rem; max-width: 85%; background-color: var(--bg-color); padding-right: 5px; }
+        .item-desc { display: block; font-size: 0.9rem; color: var(--text-muted); font-style: italic; margin-top: -3px; margin-bottom: 15px; }
+        .item-price { font-weight: 600; font-size: 1.1rem; white-space: nowrap; background-color: var(--bg-color); padding-left: 5px; color: var(--accent-color); }
+        .menu-footer { margin-top: 60px; padding-top: 20px; border-top: 1px solid var(--border-color); text-align: center; font-size: 0.95rem; color: var(--text-muted); opacity: 0; animation: fadeIn 1s ease 1s forwards; }
         .wifi-box { margin-top: 15px; padding: 10px; background-color: #fff; border: 1px dashed #ccc; display: inline-block; border-radius: 5px;}
         .wifi-box strong { color: var(--accent-color); }
-
-        /* Supporto RTL per Ebraico e Persiano */
         html[dir="rtl"] .item-name { padding-right: 0; padding-left: 5px; }
         html[dir="rtl"] .item-price { padding-left: 0; padding-right: 5px; }
         html[dir="rtl"] .lang-selector-wrapper::after { right: auto; left: 15px; }
         html[dir="rtl"] select#lang-select { padding: 8px 15px 8px 35px; }
-
-        @keyframes fadeIn {
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Mobile Responsive */
-        @media (max-width: 600px) {
-            h1.restaurant-name { font-size: 2.5rem; }
-            h2.menu-subtitle { font-size: 0.9rem; letter-spacing: 2px; }
-            .category-title { font-size: 1.5rem; }
-            .item-name { font-size: 1rem; max-width: 75%; }
-            .item-price { font-size: 1rem; }
-            header { padding: 10px 15px; }
-            .logo-container span { display: none; } /* Su mobile nasconde il testo nell'header se c'è l'immagine per risparmiare spazio */
-        }
+        @keyframes fadeIn { to { opacity: 1; transform: translateY(0); } }
+        @media (max-width: 600px) { h1.restaurant-name { font-size: 2.5rem; } h2.menu-subtitle { font-size: 0.9rem; letter-spacing: 2px; } .category-title { font-size: 1.5rem; } .item-name { font-size: 1rem; max-width: 75%; } .item-price { font-size: 1rem; } .logo-container span { display: none; } }
     </style>
 </head>
 <body>
 
     <header>
         <div class="logo-container">
-            <!-- SOSTITUISCI "tuo-logo.png" CON IL NOME ESATTO DELLA TUA IMMAGINE. -->
-            <!-- L'attributo onerror nasconde l'immagine se il file non viene trovato, lasciando solo il testo -->
             <img src="tuo-logo.png" alt="Logo" class="logo-img" onerror="this.style.display='none'">
             <span>Casa San Giacomo</span>
         </div>
         <div class="lang-selector-wrapper">
             <select id="lang-select">
-                <option value="it">🇮🇹 Italiano</option>
-                <option value="en">🇬🇧 English</option>
-                <option value="es">🇪🇸 Español</option>
-                <option value="es-AR">🇦🇷 Español (Argentina)</option>
-                <option value="es-CL">🇨🇱 Español (Chile)</option>
-                <option value="fr">🇫🇷 Français</option>
-                <option value="de">🇩🇪 Deutsch</option>
-                <option value="nl">🇳🇱 Nederlands</option>
-                <option value="pt">🇵🇹 Português (PT)</option>
-                <option value="pt-BR">🇧🇷 Português (BR)</option>
-                <option value="fi">🇫🇮 Suomi</option>
-                <option value="ru">🇷🇺 Русский</option>
-                <option value="hi">🇮🇳 हिन्दी (Hindi)</option>
-                <option value="zh">🇨🇳 中文 (Cinese)</option>
-                <option value="ja">🇯🇵 日本語 (Giapponese)</option>
-                <option value="ko">🇰🇷 한국어 (Coreano)</option>
-                <option value="he">🇮🇱 עברית (Ebraico)</option>
-                <option value="fa">🇮🇷 فارسی (Persiano)</option>
+                <option value="it">🇮🇹 Italiano</option><option value="en">🇬🇧 English</option><option value="es">🇪🇸 Español</option>
+                <option value="es-AR">🇦🇷 Español (AR)</option><option value="es-CL">🇨🇱 Español (CL)</option><option value="fr">🇫🇷 Français</option>
+                <option value="de">🇩🇪 Deutsch</option><option value="nl">🇳🇱 Nederlands</option><option value="pt">🇵🇹 Português (PT)</option>
+                <option value="pt-BR">🇧🇷 Português (BR)</option><option value="fi">🇫🇮 Suomi</option><option value="ru">🇷🇺 Русский</option>
+                <option value="hi">🇮🇳 हिन्दी</option><option value="zh">🇨🇳 中文</option><option value="ja">🇯🇵 日本語</option>
+                <option value="ko">🇰🇷 한국어</option><option value="he">🇮🇱 עברית</option><option value="fa">🇮🇷 فارسی</option>
             </select>
         </div>
     </header>
@@ -271,410 +74,857 @@
     <main>
         <div class="title-section">
             <h1 class="restaurant-name">Casa San Giacomo</h1>
-            <!-- Questo sottotitolo cambierà lingua (es. "Our Menu", "Notre Menu") -->
             <h2 class="menu-subtitle" id="main-subtitle">Il Nostro Menù</h2>
         </div>
-        
         <div id="menu-container"></div>
         <div id="footer-container"></div>
     </main>
 
     <script>
+        // --- DATABASE VINI (Universale, non necessita traduzione) ---
+        const wineListDatabase = [
+            { id: "reds", items: [
+                { name: "Marmorelle “Tenute Rubino”", desc: "Negramaro", price: "€19" }, { name: "Marmorelle “Tenute Rubino”", desc: "Primitivo", price: "€19" },
+                { name: "Lamo “Tenute Rubino”", desc: "Ottavianello", price: "€21" }, { name: "Passamante “Masseria Li Veli”", desc: "Salice Salentino", price: "€21" },
+                { name: "Roccamora “Schola Sarmenti”", desc: "Negramaro", price: "€22" }, { name: "Lirica “Produttori di Manduria”", desc: "Primitivo", price: "€22" },
+                { name: "Trentangeli BIO “Tormaresca”", desc: "Aglianico", price: "€25" }, { name: "Oltre me “Tenute Rubino”", desc: "Susumaniello", price: "€26" },
+                { name: "Vigna Pedale “Torre Vento”", desc: "Nero di Troia", price: "€26" }, { name: "Parco Marano BIO “G. Ceci”", desc: "Nero di Troia", price: "€26" },
+                { name: "Nerio “Schola Sarmenti”", desc: "Negramaro · Malvasia", price: "€27" }, { name: "Askos “Masseria Li Veli”", desc: "Malsavia Nera", price: "€28" },
+                { name: "Salice Salentino “Cosimo Taurino”", desc: "Negramaro · Malvasia", price: "€28" }, { name: "Palombara “Tenute Rubino”", desc: "Primitivo", price: "€30" },
+                { name: "“Muro Sant’Angelo Chiaromonte”", desc: "Primitivo", price: "€32" }, { name: "Nauna “Schola Sarmenti”", desc: "Primitivo · Negramaro", price: "€35" },
+                { name: "Antieri “Schola Sarmenti”", desc: "Susumaniello", price: "€35" }, { name: "Niuru Maru BIO “Archetipo”", desc: "Negramaro", price: "€35" },
+                { name: "Teresamanara “Cantele”", desc: "Negramaro", price: "€35" }, { name: "Notarpanaro “Cosimo Taurino”", desc: "Negramaro", price: "€38" },
+                { name: "F “San Marzano”", desc: "Negramaro", price: "€40" }, { name: "50 anni “San Marzano”", desc: "Primitivo", price: "€40" },
+                { name: "Visellio “Tenute Rubino”", desc: "Primitivo", price: "€45" }, { name: "Felice BIO “G. Ceci” Riserva", desc: "Nero di Troia", price: "€45" },
+                { name: "Sessant’anni “San Marzano”", desc: "Primitivo", price: "€45" }, { name: "Diciotto “Schola Sarmenti”", desc: "Primitivo", price: "€55" },
+                { name: "Collezione Privata “Varvaglione”", desc: "Negramaro", price: "€55" }, { name: "Donnalisa “Leone De Catris”", desc: "Salice Salentino", price: "€55" },
+                { name: "62 “San Marzano”", desc: "Primitivo", price: "€55" }, { name: "Mondo Nuovo “Morella”", desc: "Primitivo", price: "€56" },
+                { name: "“Barbatto Chiaromonte Riserva”", desc: "Primitivo", price: "€60" }, { name: "“Attanasio”", desc: "Primitivo di Manduria", price: "€60" },
+                { name: "Torre Testa “Tenute Rubino” 2017", desc: "Susumaniello", price: "€75" }, { name: "Le Braci “Garofano”", desc: "Negramaro", price: "€80" },
+                { name: "Graticciaia “Vallone”", desc: "Negramaro", price: "€85" }, { name: "Patriglione “Cosimo Taurino”", desc: "Negramaro", price: "€85" },
+                { name: "Patriglione “Cosimo Taurino” 2007", desc: "Negramaro", price: "€120" }
+            ]},
+            { id: "whites", items: [
+                { name: "Marmorelle, “Tenute Rubino”", desc: "Malvasia", price: "€23" }, { name: "Lamiro, “Tenute Rubino”", desc: "Verdeca", price: "€24" },
+                { name: "Edda “San Marzano”", desc: "Chardonnay", price: "€28" }, { name: "Panascio BIO “Giancarlo Ceci”", desc: "Bombino Bianco", price: "€28" },
+                { name: "Terasa Manara, “Cantele” Riserva", desc: "Chardonnay", price: "€40" }
+            ]},
+            { id: "roses", items: [
+                { name: "Marmorelle, “Tenute Rubino”", desc: "Negramaro · Susumaniello", price: "€23" }, { name: "Tramari, “San Marzano”", desc: "Primitivo", price: "€25" },
+                { name: "Kimia “Chiaromonte”", desc: "Pinot Nero", price: "€28" }, { name: "60 Anni Rosè “San Marzano”", desc: "Primitivo", price: "€40" },
+                { name: "“Attanasio”", desc: "Primitivo di Manduria", price: "€40" }
+            ]},
+            { id: "sparkling", items: [
+                { name: "Libens “Tenute Rubino”", desc: "Vermentino", price: "€28" }, { name: "Pas Dosè “D’araprì”", desc: "Bombino bianco · Pinot nero", price: "€45" },
+                { name: "Ancestrale Brut “Chiaromonte”", desc: "Chardonnay", price: "€50" }, { name: "Sumare Rose “Tenute Rubino”", desc: "Susumaniello", price: "€55" },
+                { name: "La Scala “Bellavista”", desc: "Chardonnay · Pinot nero", price: "€60" }, { name: "Bollinger Champagne", desc: "Champagne", price: "€95" },
+                { name: "Pierre Belle Epoque", desc: "Champagne", price: "€250" }
+            ]}
+        ];
+
+        // --- TRADUZIONI TITOLI VINI ---
+        const wineCategories = {
+            "it": { reds: "Vini Rossi", whites: "Vini Bianchi", roses: "Vini Rosati", sparkling: "Bollicine" },
+            "en": { reds: "Red Wines", whites: "White Wines", roses: "Rosé Wines", sparkling: "Sparkling Wines" },
+            "es": { reds: "Vinos Tintos", whites: "Vinos Blancos", roses: "Vinos Rosados", sparkling: "Espumosos" },
+            "es-AR": { reds: "Vinos Tintos", whites: "Vinos Blancos", roses: "Vinos Rosados", sparkling: "Espumantes" },
+            "es-CL": { reds: "Vinos Tintos", whites: "Vinos Blancos", roses: "Vinos Rosados", sparkling: "Espumantes" },
+            "fr": { reds: "Vins Rouges", whites: "Vins Blancs", roses: "Vins Rosés", sparkling: "Bulles & Champagnes" },
+            "de": { reds: "Rotweine", whites: "Weißweine", roses: "Roséweine", sparkling: "Schaumweine" },
+            "nl": { reds: "Rode Wijnen", whites: "Witte Wijnen", roses: "Rosé Wijnen", sparkling: "Mousserende Wijnen" },
+            "pt": { reds: "Vinhos Tintos", whites: "Vinhos Brancos", roses: "Vinhos Rosés", sparkling: "Espumantes" },
+            "pt-BR": { reds: "Vinhos Tintos", whites: "Vinhos Brancos", roses: "Vinhos Rosés", sparkling: "Espumantes" },
+            "fi": { reds: "Punaviinit", whites: "Valkoviinit", roses: "Roseeviinit", sparkling: "Kuohuviinit" },
+            "ru": { reds: "Красные вина", whites: "Белые вина", roses: "Розовые вина", sparkling: "Игристые вина" },
+            "hi": { reds: "रेड वाइन", whites: "व्हाइट वाइन", roses: "रोज़ वाइन", sparkling: "स्पार्कलिंग वाइन" },
+            "zh": { reds: "红葡萄酒", whites: "白葡萄酒", roses: "桃红葡萄酒", sparkling: "起泡酒" },
+            "ja": { reds: "赤ワイン", whites: "白ワイン", roses: "ロゼワイン", sparkling: "スパークリングワイン" },
+            "ko": { reds: "레드 와인", whites: "화이트 와인", roses: "로제 와인", sparkling: "스파클링 와인" },
+            "he": { reds: "יינות אדומים", whites: "יינות לבנים", roses: "יינות רוזה", sparkling: "יינות מבעבעים" },
+            "fa": { reds: "شراب‌های قرمز", whites: "شراب‌های سفید", roses: "شراب‌های رزه", sparkling: "شراب‌های گازدار" }
+        };
+
+        // --- TRADUZIONI COMPLETE CIBO & BEVANDE ---
         const menuData = {
-            "en": {
-                title: "Our Menu",
-                categories: [
-                    { name: "Starters", items: [
-                        { name: "Broad bean purée served with wild chicory, red onion", price: "€10" },
-                        { name: "Bruschetta of Altamura bread with stracciatella cheese, rocket, zucchini, cherry tomatoes", price: "€11" },
-                        { name: "Burrata cheese in tarallo basket with crispy capocollo, sun-dried tomato pesto", price: "€12" },
-                        { name: "Local meatballs and brasciola in tomato sauce", price: "€14" },
-                        { name: "Slow cooked Octopus with aubergine, basil mayo", price: "€15" },
-                        { name: "Local cheese platter with honey, jams, sliced local salami", price: "€15" }
-                    ]},
-                    { name: "Pastas", items: [
-                        { name: "Senator Cappelli “Orecchiette” with wild broccoli, fresh cherry tomatoes, anchovies, crispy bread", price: "€11" },
-                        { name: "Senator Cappelli “Maritati” pasta with brasciola in tomato sauce", price: "€14" },
-                        { name: "Senator Cappelli “Strascinate” pasta with olives, artichoke mousse, ricotta, almond", price: "€14" },
-                        { name: "Gnocchetti with peppers, local sausage, pecorino cream, crumbled tarallo", price: "€15" },
-                        { name: "Tagliolino pasta with octopus, yellow datterino tomato, sun-dried tomato, primitivo sauce", price: "€16" }
-                    ]},
-                    { name: "Mains", items: [
-                        { name: "\"Zampina\" Sausage with oven-baked potatoes or wild chicory", price: "€15" },
-                        { name: "Grilled \"bombette\" with oven-baked potatoes or wild chicory", price: "€16" },
-                        { name: "Sea bass fillet with “poverella” courgette", price: "€19" },
-                        { name: "Selection of local and special meats", price: "€/100gr" }
-                    ]},
-                    { name: "Side Dishes", items: [
-                        { name: "Baked potatoes", price: "€6" },
-                        { name: "Sautéed vegetables", price: "€6" },
-                        { name: "Gratin vegetables", price: "€6" },
-                        { name: "Smashed potato with melted caciocavallo cheese, capocollo, house sauce", price: "€7" }
-                    ]},
-                    { name: "Desserts", items: [
-                        { name: "Lime ricotta foam with crunchy almonds, lemon curd and red berries", price: "€7" },
-                        { name: "San Marzano Tiramisu", price: "€7" },
-                        { name: "Lemon pie with red berries", price: "€7" },
-                        { name: "Brownie with dulce de leche", price: "€7" },
-                        { name: "Artisanal semifreddo", price: "€7" }
-                    ]},
-                    { name: "Wines by the Glass", items: [
-                        { name: "Glass of local White Wine", desc: "(Verdeca · Malvasia)", price: "€6" },
-                        { name: "Glass of local Red Wine", desc: "(Primitivo · Negramaro · Susumaniello)", price: "€6" },
-                        { name: "Glass of Ostuni D.O.C Wine", desc: "(Ottavianello)", price: "€6" },
-                        { name: "Glass of local Rosè Wine", desc: "(Negramaro)", price: "€6" },
-                        { name: "Glass of local Sparkling Wine", desc: "(Vermentino)", price: "€6" }
-                    ]},
-                    { name: "Beers", items: [
-                        { name: "Nastro Azzurro Beer", price: "€4" },
-                        { name: "Nastro Azzurro Non alcoholic Beer", price: "€4.50" },
-                        { name: "Blonde Menabrea Beer", price: "€5" },
-                        { name: "Red Menabrea Beer", price: "€6" },
-                        { name: "Weiss Menabrea Beer", price: "€6" }
-                    ]},
-                    { name: "Soft Drinks", items: [
-                        { name: "Coca Cola 33cl", price: "€4" },
-                        { name: "Fanta 33cl", price: "€4" },
-                        { name: "Tonic Water", price: "€4" },
-                        { name: "Lemonsoda", price: "€4" },
-                        { name: "Orange juice", price: "€4" },
-                        { name: "Water", price: "€3" }
-                    ]},
-                    { name: "Cocktails & Spirits", items: [
-                        { name: "Spritz (Aperol or Campari)", price: "€8" },
-                        { name: "Hugo", price: "€8" },
-                        { name: "Limoncello Spritz", price: "€8" },
-                        { name: "Espresso Martini", price: "€8" },
-                        { name: "Negroni", price: "€8" },
-                        { name: "Negroni Sbagliato", price: "€8" },
-                        { name: "Americano", price: "€8" },
-                        { name: "Gin Tonic", desc: "*Gin: Tanqueray, Gin Mare, Bombay, Hendrick’s & Gin Locale", price: "€8/15" },
-                        { name: "Gin Lemon", desc: "*Gin: Tanqueray, Gin Mare, Bombay, Hendrick’s & Gin Locale", price: "€8/15" },
-                        { name: "Vodka Tonic", desc: "*Vodka: Moskovskaya, Belvedere & Grey Goose", price: "€8/12" },
-                        { name: "Vodka Lemon", desc: "*Vodka: Moskovskaya, Belvedere & Grey Goose", price: "€8/12" },
-                        { name: "Rum & Cola", price: "€8/12" }
-                    ]}
-                ],
-                info: { cover: "Cover charge €3", allergy: "Please inform the staff of any allergies" }
-            },
             "it": {
                 title: "Il Nostro Menù",
                 categories: [
                     { name: "Antipasti", items: [
-                        { name: "Purea di fave con cicoria selvatica e cipolla rossa", price: "€10" },
-                        { name: "Bruschetta di pane di Altamura con stracciatella, rucola, zucchine, pomodorini", price: "€11" },
-                        { name: "Burrata in crosta di tarallo con capocollo croccante e pesto di pomodori secchi", price: "€12" },
-                        { name: "Polpette e brasciola di carni locali al sugo", price: "€14" },
-                        { name: "Polpo a cottura lenta con melanzane e maionese al basilico", price: "€15" },
-                        { name: "Tagliere di formaggi locali con miele, confetture e salumi locali a fette", price: "€15" }
+                        { name: "Purea di fave con cicoria selvatica e cipolla rossa", price: "€10" }, { name: "Bruschetta di pane di Altamura con stracciatella, rucola, zucchine, pomodorini", price: "€11" },
+                        { name: "Burrata in crosta di tarallo con capocollo croccante e pesto di pomodori secchi", price: "€12" }, { name: "Polpette e brasciola di carni locali al sugo", price: "€14" },
+                        { name: "Polpo a cottura lenta con melanzane e maionese al basilico", price: "€15" }, { name: "Tagliere di formaggi locali con miele, confetture e salumi locali a fette", price: "€15" }
                     ]},
                     { name: "Primi", items: [
-                        { name: "Orecchiette Senatore Cappelli ai broccoletti selvatici, pomodorini freschi, acciughe e pane croccante", price: "€11" },
-                        { name: "Maritati Senatore Cappelli al sugo con brasciola", price: "€14" },
-                        { name: "Strascinate Senatore Cappelli con olive, spuma di carciofi, ricotta e mandorle", price: "€14" },
-                        { name: "Gnocchetti con peperoni, salsiccia locale, crema di pecorino e tarallo sbriciolato", price: "€15" },
+                        { name: "Orecchiette Senatore Cappelli ai broccoletti selvatici, pomodorini freschi, acciughe e pane croccante", price: "€11" }, { name: "Maritati Senatore Cappelli al sugo con brasciola", price: "€14" },
+                        { name: "Strascinate Senatore Cappelli con olive, spuma di carciofi, ricotta e mandorle", price: "€14" }, { name: "Gnocchetti con peperoni, salsiccia locale, crema di pecorino e tarallo sbriciolato", price: "€15" },
                         { name: "Tagliolino con polpo, datterino giallo, pomodoro secco e riduzione di primitivo", price: "€16" }
                     ]},
                     { name: "Secondi", items: [
-                        { name: "Salsiccia \"zampina\" con patate al forno o cicoria selvatica", price: "€15" },
-                        { name: "Bombette alla brace con patate al forno o cicoria selvatica", price: "€16" },
-                        { name: "Filetto di branzino con zucchine alla \"poverella\"", price: "€19" },
-                        { name: "Selezione di carni rosse locali e speciali", price: "€/all'etto" }
+                        { name: "Salsiccia \"Zampina\" con patate al forno o cicoria selvatica", price: "€15" }, { name: "Bombette alla brace con patate al forno o cicoria selvatica", price: "€16" },
+                        { name: "Filetto di branzino con zucchine alla \"poverella\"", price: "€19" }, { name: "Selezione di carni rosse locali e speciali", price: "€/all'etto" }
                     ]},
                     { name: "Contorni", items: [
-                        { name: "Patate al forno", price: "€6" },
-                        { name: "Verdure saltate in padella", price: "€6" },
-                        { name: "Verdure gratinate", price: "€6" },
-                        { name: "Schiacciata di patate con caciocavallo fuso, capocollo, salsa della casa", price: "€7" }
+                        { name: "Patate al forno", price: "€6" }, { name: "Verdure saltate in padella", price: "€6" }, { name: "Verdure gratinate", price: "€6" }, { name: "Schiacciata di patate con caciocavallo fuso, capocollo, salsa della casa", price: "€7" }
                     ]},
                     { name: "Dolci", items: [
-                        { name: "Spuma di ricotta al lime con mandorle croccanti, lemon curd e frutti rossi", price: "€7" },
-                        { name: "Tiramisù al San Marzano", price: "€7" },
-                        { name: "Lemon pie con frutti rossi", price: "€7" },
-                        { name: "Brownie con dulce de leche", price: "€7" },
-                        { name: "Semifreddo artigianale", price: "€7" }
+                        { name: "Spuma di ricotta al lime con mandorle croccanti, lemon curd e frutti rossi", price: "€7" }, { name: "Tiramisù al San Marzano", price: "€7" },
+                        { name: "Lemon pie con frutti rossi", price: "€7" }, { name: "Brownie con dulce de leche", price: "€7" }, { name: "Semifreddo artigianale", price: "€7" }
                     ]},
                     { name: "Vini al Calice", items: [
-                        { name: "Calice di Vino Bianco Locale", desc: "(Verdeca · Malvasia)", price: "€6" },
-                        { name: "Calice di Vino Rosso Locale", desc: "(Primitivo · Negramaro · Susumaniello)", price: "€6" },
-                        { name: "Calice di Vino D.O.C. Ostuni", desc: "(Ottavianello)", price: "€6" },
-                        { name: "Calice di Vino Rosato Locale", desc: "(Negramaro)", price: "€6" },
-                        { name: "Calice di Spumante Locale", desc: "(Vermentino)", price: "€6" }
+                        { name: "Calice di Vino Bianco Locale", desc: "(Verdeca · Malvasia)", price: "€6" }, { name: "Calice di Vino Rosso Locale", desc: "(Primitivo · Negramaro · Susumaniello)", price: "€6" },
+                        { name: "Calice di Vino D.O.C. Ostuni", desc: "(Ottavianello)", price: "€6" }, { name: "Calice di Vino Rosato Locale", desc: "(Negramaro)", price: "€6" }, { name: "Calice di Spumante Locale", desc: "(Vermentino)", price: "€6" }
                     ]},
                     { name: "Birre", items: [
-                        { name: "Birra Nastro Azzurro", price: "€4" },
-                        { name: "Birra Nastro Azzurro Analcolica", price: "€4,50" },
-                        { name: "Birra Menabrea Bionda", price: "€5" },
-                        { name: "Birra Menabrea Rossa", price: "€6" },
-                        { name: "Birra Menabrea Weiss", price: "€6" }
+                        { name: "Birra Nastro Azzurro", price: "€4" }, { name: "Birra Nastro Azzurro Analcolica", price: "€4,50" }, { name: "Birra Menabrea Bionda", price: "€5" },
+                        { name: "Birra Menabrea Rossa", price: "€6" }, { name: "Birra Menabrea Weiss", price: "€6" }
                     ]},
                     { name: "Bevande", items: [
-                        { name: "Coca Cola 33cl", price: "€4" },
-                        { name: "Fanta 33cl", price: "€4" },
-                        { name: "Acqua Tonica", price: "€4" },
-                        { name: "Lemonsoda", price: "€4" },
-                        { name: "Succo d'arancia", price: "€4" },
-                        { name: "Acqua", price: "€3" }
+                        { name: "Coca Cola 33cl", price: "€4" }, { name: "Fanta 33cl", price: "€4" }, { name: "Acqua Tonica", price: "€4" }, { name: "Lemonsoda", price: "€4" }, { name: "Succo d'arancia", price: "€4" }, { name: "Acqua minerale", price: "€3" }
                     ]},
                     { name: "Cocktail e Spiriti", items: [
-                        { name: "Spritz (Aperol o Campari)", price: "€8" },
-                        { name: "Hugo", price: "€8" },
-                        { name: "Limoncello Spritz", price: "€8" },
-                        { name: "Espresso Martini", price: "€8" },
-                        { name: "Negroni", price: "€8" },
-                        { name: "Negroni Sbagliato", price: "€8" },
-                        { name: "Americano", price: "€8" },
-                        { name: "Gin Tonic", desc: "*Gin: Tanqueray, Gin Mare, Bombay, Hendrick’s & Gin Locale", price: "€8/15" },
-                        { name: "Gin Lemon", desc: "*Gin: Tanqueray, Gin Mare, Bombay, Hendrick’s & Gin Locale", price: "€8/15" },
-                        { name: "Vodka Tonic", desc: "*Vodka: Moskovskaya, Belvedere & Grey Goose", price: "€8/12" },
-                        { name: "Vodka Lemon", desc: "*Vodka: Moskovskaya, Belvedere & Grey Goose", price: "€8/12" },
-                        { name: "Rum & Cola", price: "€8/12" }
+                        { name: "Spritz (Aperol o Campari)", price: "€8" }, { name: "Hugo", price: "€8" }, { name: "Limoncello Spritz", price: "€8" }, { name: "Espresso Martini", price: "€8" },
+                        { name: "Negroni", price: "€8" }, { name: "Negroni Sbagliato", price: "€8" }, { name: "Americano", price: "€8" },
+                        { name: "Gin Tonic", desc: "*Gin: Tanqueray, Gin Mare, Bombay, Hendrick’s & Gin Locale", price: "€8/15" }, { name: "Gin Lemon", desc: "*Gin: Tanqueray, Gin Mare, Bombay, Hendrick’s & Gin Locale", price: "€8/15" },
+                        { name: "Vodka Tonic", desc: "*Vodka: Moskovskaya, Belvedere & Grey Goose", price: "€8/12" }, { name: "Vodka Lemon", desc: "*Vodka: Moskovskaya, Belvedere & Grey Goose", price: "€8/12" }, { name: "Rum & Cola", price: "€8/12" }
                     ]}
-                ],
-                info: { cover: "Coperto €3", allergy: "Si prega di informare il personale di eventuali allergie o intolleranze" }
+                ], info: { cover: "Coperto €3", allergy: "Si prega di informare il personale di eventuali allergie o intolleranze" }
             },
-            "es": { 
+            "en": {
+                title: "Our Menu",
+                categories: [
+                    { name: "Starters", items: [
+                        { name: "Broad bean purée served with wild chicory, red onion", price: "€10" }, { name: "Bruschetta of Altamura bread with stracciatella cheese, rocket, zucchini, cherry tomatoes", price: "€11" },
+                        { name: "Burrata cheese in tarallo basket with crispy capocollo, sun-dried tomato pesto", price: "€12" }, { name: "Local meatballs and brasciola in tomato sauce", price: "€14" },
+                        { name: "Slow cooked Octopus with aubergine, basil mayo", price: "€15" }, { name: "Local cheese platter with honey, jams, sliced local salami", price: "€15" }
+                    ]},
+                    { name: "Pastas", items: [
+                        { name: "Senator Cappelli “Orecchiette” with wild broccoli, fresh cherry tomatoes, anchovies, crispy bread", price: "€11" }, { name: "Senator Cappelli “Maritati” pasta with brasciola in tomato sauce", price: "€14" },
+                        { name: "Senator Cappelli “Strascinate” pasta with olives, artichoke mousse, ricotta, almond", price: "€14" }, { name: "Gnocchetti with peppers, local sausage, pecorino cream, crumbled tarallo", price: "€15" },
+                        { name: "Tagliolino pasta with octopus, yellow datterino tomato, sun-dried tomato, primitivo sauce", price: "€16" }
+                    ]},
+                    { name: "Mains", items: [
+                        { name: "\"Zampina\" Sausage with oven-baked potatoes or wild chicory", price: "€15" }, { name: "Grilled \"bombette\" with oven-baked potatoes or wild chicory", price: "€16" },
+                        { name: "Sea bass fillet with “poverella” courgette", price: "€19" }, { name: "Selection of local and special meats", price: "€/100gr" }
+                    ]},
+                    { name: "Side Dishes", items: [
+                        { name: "Baked potatoes", price: "€6" }, { name: "Sautéed vegetables", price: "€6" }, { name: "Gratin vegetables", price: "€6" }, { name: "Smashed potato with melted caciocavallo cheese, capocollo, house sauce", price: "€7" }
+                    ]},
+                    { name: "Desserts", items: [
+                        { name: "Lime ricotta foam with crunchy almonds, lemon curd and red berries", price: "€7" }, { name: "San Marzano Tiramisu", price: "€7" },
+                        { name: "Lemon pie with red berries", price: "€7" }, { name: "Brownie with dulce de leche", price: "€7" }, { name: "Artisanal semifreddo", price: "€7" }
+                    ]},
+                    { name: "Wines by the Glass", items: [
+                        { name: "Glass of local White Wine", desc: "(Verdeca · Malvasia)", price: "€6" }, { name: "Glass of local Red Wine", desc: "(Primitivo · Negramaro · Susumaniello)", price: "€6" },
+                        { name: "Glass of Ostuni D.O.C Wine", desc: "(Ottavianello)", price: "€6" }, { name: "Glass of local Rosè Wine", desc: "(Negramaro)", price: "€6" }, { name: "Glass of local Sparkling Wine", desc: "(Vermentino)", price: "€6" }
+                    ]},
+                    { name: "Beers", items: [
+                        { name: "Nastro Azzurro Beer", price: "€4" }, { name: "Nastro Azzurro Non alcoholic", price: "€4.50" }, { name: "Blonde Menabrea Beer", price: "€5" },
+                        { name: "Red Menabrea Beer", price: "€6" }, { name: "Weiss Menabrea Beer", price: "€6" }
+                    ]},
+                    { name: "Soft Drinks", items: [
+                        { name: "Coca Cola 33cl", price: "€4" }, { name: "Fanta 33cl", price: "€4" }, { name: "Tonic Water", price: "€4" }, { name: "Lemonsoda", price: "€4" }, { name: "Orange juice", price: "€4" }, { name: "Water", price: "€3" }
+                    ]},
+                    { name: "Cocktails & Spirits", items: [
+                        { name: "Spritz (Aperol or Campari)", price: "€8" }, { name: "Hugo", price: "€8" }, { name: "Limoncello Spritz", price: "€8" }, { name: "Espresso Martini", price: "€8" },
+                        { name: "Negroni", price: "€8" }, { name: "Negroni Sbagliato", price: "€8" }, { name: "Americano", price: "€8" },
+                        { name: "Gin Tonic", desc: "*Gin: Tanqueray, Gin Mare, Bombay, Hendrick’s & Gin Locale", price: "€8/15" }, { name: "Gin Lemon", desc: "*Gin: Tanqueray, Gin Mare, Bombay, Hendrick’s & Gin Locale", price: "€8/15" },
+                        { name: "Vodka Tonic", desc: "*Vodka: Moskovskaya, Belvedere & Grey Goose", price: "€8/12" }, { name: "Vodka Lemon", desc: "*Vodka: Moskovskaya, Belvedere & Grey Goose", price: "€8/12" }, { name: "Rum & Cola", price: "€8/12" }
+                    ]}
+                ], info: { cover: "Cover charge €3", allergy: "Please inform the staff of any allergies" }
+            },
+            "es": {
                 title: "Nuestro Menú",
                 categories: [
                     { name: "Entrantes", items: [
-                        { name: "Puré de habas con achicoria silvestre y cebolla roja", price: "€10" },
-                        { name: "Bruschetta de pan de Altamura con stracciatella, rúcula, calabacín, tomates cherry", price: "€11" },
-                        { name: "Burrata en costra de tarallo con capocollo crujiente y pesto de tomates secos", price: "€12" },
-                        { name: "Albóndigas y brasciola locales en salsa de tomate", price: "€14" },
-                        { name: "Pulpo cocinado a fuego lento con berenjenas y mayonesa de albahaca", price: "€15" },
-                        { name: "Tabla de quesos locales con miel, mermeladas y salami local", price: "€15" }
+                        { name: "Puré de habas con achicoria silvestre y cebolla roja", price: "€10" }, { name: "Bruschetta de pan de Altamura con stracciatella, rúcula, calabacín, tomates cherry", price: "€11" },
+                        { name: "Burrata en costra de tarallo con capocollo crujiente y pesto de tomates secos", price: "€12" }, { name: "Albóndigas y brasciola locales en salsa de tomate", price: "€14" },
+                        { name: "Pulpo cocinado a fuego lento con berenjenas y mayonesa de albahaca", price: "€15" }, { name: "Tabla de quesos locales con miel, mermeladas y salami local", price: "€15" }
                     ]},
                     { name: "Pastas", items: [
-                        { name: "Orecchiette Senatore Cappelli con brócoli silvestre, tomatitos, anchoas y pan crujiente", price: "€11" },
-                        { name: "Pasta Maritati Senatore Cappelli en salsa con brasciola", price: "€14" },
-                        { name: "Pasta Strascinate Senatore Cappelli con aceitunas, mousse de alcachofa, ricotta y almendras", price: "€14" },
-                        { name: "Ñoquis con pimientos, salchicha local, crema de pecorino y tarallo desmenuzado", price: "€15" },
+                        { name: "Orecchiette Senatore Cappelli con brócoli silvestre, tomatitos, anchoas y pan crujiente", price: "€11" }, { name: "Pasta Maritati Senatore Cappelli en salsa con brasciola", price: "€14" },
+                        { name: "Pasta Strascinate Senatore Cappelli con aceitunas, mousse de alcachofa, ricotta y almendras", price: "€14" }, { name: "Ñoquis con pimientos, salchicha local, crema de pecorino y tarallo desmenuzado", price: "€15" },
                         { name: "Tagliolino con pulpo, tomate datterino amarillo, tomate seco y salsa de primitivo", price: "€16" }
                     ]},
                     { name: "Platos Principales", items: [
-                        { name: "Salchicha \"zampina\" con papas al horno o achicoria silvestre", price: "€15" },
-                        { name: "Bombette a la brasa con papas al horno o achicoria silvestre", price: "€16" },
-                        { name: "Filete de lubina con calabacines \"poverella\"", price: "€19" },
-                        { name: "Selección de carnes rojas locales y especiales", price: "€/100gr" }
+                        { name: "Salchicha \"zampina\" con papas al horno o achicoria silvestre", price: "€15" }, { name: "Bombette a la brasa con papas al horno o achicoria silvestre", price: "€16" },
+                        { name: "Filete de lubina con calabacines \"poverella\"", price: "€19" }, { name: "Selección de carnes rojas locales y especiales", price: "€/100gr" }
                     ]},
                     { name: "Guarniciones", items: [
-                        { name: "Papas al horno", price: "€6" },
-                        { name: "Verduras salteadas", price: "€6" },
-                        { name: "Verduras gratinadas", price: "€6" },
-                        { name: "Papa machacada con queso caciocavallo derretido, capocollo, salsa de la casa", price: "€7" }
+                        { name: "Papas al horno", price: "€6" }, { name: "Verduras salteadas", price: "€6" }, { name: "Verduras gratinadas", price: "€6" }, { name: "Papa machacada con queso caciocavallo derretido, capocollo, salsa de la casa", price: "€7" }
                     ]},
                     { name: "Postres", items: [
-                        { name: "Espuma de ricotta a la lima con almendras, lemon curd y frutos rojos", price: "€7" },
-                        { name: "Tiramisú al San Marzano", price: "€7" },
-                        { name: "Lemon pie con frutos rojos", price: "€7" },
-                        { name: "Brownie con dulce de leche", price: "€7" },
-                        { name: "Semifrío artesanal", price: "€7" }
+                        { name: "Espuma de ricotta a la lima con almendras, lemon curd y frutos rojos", price: "€7" }, { name: "Tiramisú al San Marzano", price: "€7" },
+                        { name: "Lemon pie con frutos rojos", price: "€7" }, { name: "Brownie con dulce de leche", price: "€7" }, { name: "Semifrío artesanal", price: "€7" }
                     ]},
                     { name: "Vinos por Copa", items: [
-                        { name: "Copa de Vino Blanco Local", desc: "(Verdeca · Malvasia)", price: "€6" },
-                        { name: "Copa de Vino Tinto Local", desc: "(Primitivo · Negramaro · Susumaniello)", price: "€6" },
-                        { name: "Copa de Vino D.O.C. Ostuni", desc: "(Ottavianello)", price: "€6" },
-                        { name: "Copa de Vino Rosado Local", desc: "(Negramaro)", price: "€6" },
-                        { name: "Copa de Espumoso Local", desc: "(Vermentino)", price: "€6" }
+                        { name: "Copa de Vino Blanco Local", desc: "(Verdeca · Malvasia)", price: "€6" }, { name: "Copa de Vino Tinto Local", desc: "(Primitivo · Negramaro · Susumaniello)", price: "€6" },
+                        { name: "Copa de Vino D.O.C. Ostuni", desc: "(Ottavianello)", price: "€6" }, { name: "Copa de Vino Rosado Local", desc: "(Negramaro)", price: "€6" }, { name: "Copa de Espumoso Local", desc: "(Vermentino)", price: "€6" }
                     ]},
                     { name: "Cervezas", items: [
-                        { name: "Cerveza Nastro Azzurro", price: "€4" },
-                        { name: "Cerveza Nastro Azzurro Sin Alcohol", price: "€4,50" },
-                        { name: "Cerveza Menabrea Rubia", price: "€5" },
-                        { name: "Cerveza Menabrea Roja", price: "€6" },
-                        { name: "Cerveza Menabrea Weiss (Trigo)", price: "€6" }
+                        { name: "Cerveza Nastro Azzurro", price: "€4" }, { name: "Cerveza Nastro Azzurro Sin Alcohol", price: "€4,50" }, { name: "Cerveza Menabrea Rubia", price: "€5" },
+                        { name: "Cerveza Menabrea Roja", price: "€6" }, { name: "Cerveza Menabrea Weiss", price: "€6" }
                     ]},
                     { name: "Bebidas", items: [
-                        { name: "Coca Cola 33cl", price: "€4" },
-                        { name: "Fanta 33cl", price: "€4" },
-                        { name: "Agua Tónica", price: "€4" },
-                        { name: "Lemonsoda", price: "€4" },
-                        { name: "Zumo de naranja", price: "€4" },
-                        { name: "Agua", price: "€3" }
+                        { name: "Coca Cola 33cl", price: "€4" }, { name: "Fanta 33cl", price: "€4" }, { name: "Agua Tónica", price: "€4" }, { name: "Lemonsoda", price: "€4" }, { name: "Zumo de naranja", price: "€4" }, { name: "Agua", price: "€3" }
                     ]},
                     { name: "Cócteles y Licores", items: [
-                        { name: "Spritz (Aperol o Campari)", price: "€8" },
-                        { name: "Hugo", price: "€8" },
-                        { name: "Limoncello Spritz", price: "€8" },
-                        { name: "Espresso Martini", price: "€8" },
-                        { name: "Negroni", price: "€8" },
-                        { name: "Negroni Sbagliato", price: "€8" },
-                        { name: "Americano", price: "€8" },
-                        { name: "Gin Tonic", desc: "*Gin: Tanqueray, Gin Mare, Bombay, Hendrick’s & Gin Locale", price: "€8/15" },
-                        { name: "Gin Lemon", desc: "*Gin: Tanqueray, Gin Mare, Bombay, Hendrick’s & Gin Locale", price: "€8/15" },
-                        { name: "Vodka Tonic", desc: "*Vodka: Moskovskaya, Belvedere & Grey Goose", price: "€8/12" },
-                        { name: "Vodka Lemon", desc: "*Vodka: Moskovskaya, Belvedere & Grey Goose", price: "€8/12" },
-                        { name: "Ron y Cola", price: "€8/12" }
+                        { name: "Spritz (Aperol o Campari)", price: "€8" }, { name: "Hugo", price: "€8" }, { name: "Limoncello Spritz", price: "€8" }, { name: "Espresso Martini", price: "€8" },
+                        { name: "Negroni", price: "€8" }, { name: "Negroni Sbagliato", price: "€8" }, { name: "Americano", price: "€8" },
+                        { name: "Gin Tonic", desc: "*Gin: Tanqueray, Gin Mare, Bombay, Hendrick’s & Gin Locale", price: "€8/15" }, { name: "Gin Lemon", desc: "*Gin: Tanqueray, Gin Mare, Bombay, Hendrick’s & Gin Locale", price: "€8/15" },
+                        { name: "Vodka Tonic", desc: "*Vodka: Moskovskaya, Belvedere & Grey Goose", price: "€8/12" }, { name: "Vodka Lemon", desc: "*Vodka: Moskovskaya, Belvedere & Grey Goose", price: "€8/12" }, { name: "Ron y Cola", price: "€8/12" }
                     ]}
-                ],
-                info: { cover: "Cubierto €3", allergy: "Por favor, informe al personal de cualquier alergia" }
+                ], info: { cover: "Cubierto €3", allergy: "Por favor, informe al personal de cualquier alergia" }
+            },
+            "es-AR": {
+                title: "Nuestro Menú",
+                categories: [
+                    { name: "Entradas", items: [
+                        { name: "Puré de habas con achicoria silvestre y cebolla morada", price: "€10" }, { name: "Bruschetta de pan de Altamura con stracciatella, rúcula, zucchini, tomates cherry", price: "€11" },
+                        { name: "Burrata en costra de tarallo con capocollo crocante y pesto de tomates secos", price: "€12" }, { name: "Albóndigas y brasciola locales en salsa de tomate", price: "€14" },
+                        { name: "Pulpo cocinado a fuego lento con berenjenas y mayonesa de albahaca", price: "€15" }, { name: "Tabla de quesos locales con miel, mermeladas y salame local", price: "€15" }
+                    ]},
+                    { name: "Pastas", items: [
+                        { name: "Orecchiette Senatore Cappelli con brócoli silvestre, tomates cherry, anchoas y pan crocante", price: "€11" }, { name: "Pasta Maritati Senatore Cappelli en salsa con brasciola", price: "€14" },
+                        { name: "Pasta Strascinate Senatore Cappelli con aceitunas, mousse de alcaucil, ricota y almendras", price: "€14" }, { name: "Ñoquis con pimientos, salchicha local, crema de pecorino y tarallo desmenuzado", price: "€15" },
+                        { name: "Tagliolino con pulpo, tomate datterino amarillo, tomate seco y salsa de primitivo", price: "€16" }
+                    ]},
+                    { name: "Platos Principales", items: [
+                        { name: "Salchicha \"zampina\" con papas al horno o achicoria silvestre", price: "€15" }, { name: "Bombette a la parrilla con papas al horno o achicoria silvestre", price: "€16" },
+                        { name: "Filete de lubina con zucchinis \"poverella\"", price: "€19" }, { name: "Selección de carnes rojas locales y especiales", price: "€/100gr" }
+                    ]},
+                    { name: "Guarniciones", items: [
+                        { name: "Papas al horno", price: "€6" }, { name: "Verduras salteadas", price: "€6" }, { name: "Verduras gratinadas", price: "€6" }, { name: "Papa aplastada con queso caciocavallo derretido, capocollo, salsa de la casa", price: "€7" }
+                    ]},
+                    { name: "Postres", items: [
+                        { name: "Espuma de ricota a la lima con almendras, lemon curd y frutos rojos", price: "€7" }, { name: "Tiramisú al San Marzano", price: "€7" },
+                        { name: "Lemon pie con frutos rojos", price: "€7" }, { name: "Brownie con dulce de leche", price: "€7" }, { name: "Semifrío artesanal", price: "€7" }
+                    ]},
+                    { name: "Vinos por Copa", items: [
+                        { name: "Copa de Vino Blanco Local", desc: "(Verdeca · Malvasia)", price: "€6" }, { name: "Copa de Vino Tinto Local", desc: "(Primitivo · Negramaro · Susumaniello)", price: "€6" },
+                        { name: "Copa de Vino D.O.C. Ostuni", desc: "(Ottavianello)", price: "€6" }, { name: "Copa de Vino Rosado Local", desc: "(Negramaro)", price: "€6" }, { name: "Copa de Espumante Local", desc: "(Vermentino)", price: "€6" }
+                    ]},
+                    { name: "Cervezas", items: [
+                        { name: "Cerveza Nastro Azzurro", price: "€4" }, { name: "Cerveza Nastro Azzurro Sin Alcohol", price: "€4,50" }, { name: "Cerveza Menabrea Rubia", price: "€5" },
+                        { name: "Cerveza Menabrea Roja", price: "€6" }, { name: "Cerveza Menabrea Weiss", price: "€6" }
+                    ]},
+                    { name: "Bebidas", items: [
+                        { name: "Coca Cola 33cl", price: "€4" }, { name: "Fanta 33cl", price: "€4" }, { name: "Agua Tónica", price: "€4" }, { name: "Lemonsoda", price: "€4" }, { name: "Jugo de naranja", price: "€4" }, { name: "Agua", price: "€3" }
+                    ]},
+                    { name: "Cócteles y Licores", items: [
+                        { name: "Spritz (Aperol o Campari)", price: "€8" }, { name: "Hugo", price: "€8" }, { name: "Limoncello Spritz", price: "€8" }, { name: "Espresso Martini", price: "€8" },
+                        { name: "Negroni", price: "€8" }, { name: "Negroni Sbagliato", price: "€8" }, { name: "Americano", price: "€8" },
+                        { name: "Gin Tonic", desc: "*Gin: Tanqueray, Gin Mare, Bombay, Hendrick’s & Gin Locale", price: "€8/15" }, { name: "Gin Lemon", desc: "*Gin: Tanqueray, Gin Mare, Bombay, Hendrick’s & Gin Locale", price: "€8/15" },
+                        { name: "Vodka Tonic", desc: "*Vodka: Moskovskaya, Belvedere & Grey Goose", price: "€8/12" }, { name: "Vodka Lemon", desc: "*Vodka: Moskovskaya, Belvedere & Grey Goose", price: "€8/12" }, { name: "Ron con Cola", price: "€8/12" }
+                    ]}
+                ], info: { cover: "Cubierto €3", allergy: "Por favor, informe al personal de cualquier alergia" }
+            },
+            "es-CL": {
+                title: "Nuestro Menú",
+                categories: [
+                    { name: "Entradas", items: [
+                        { name: "Puré de habas con achicoria silvestre y cebolla morada", price: "€10" }, { name: "Bruschetta de pan de Altamura con stracciatella, rúcula, zapallito, tomates cherry", price: "€11" },
+                        { name: "Burrata en costra de tarallo con capocollo crujiente y pesto de tomates secos", price: "€12" }, { name: "Albóndigas y brasciola locales en salsa de tomate", price: "€14" },
+                        { name: "Pulpo cocinado a fuego lento con berenjenas y mayonesa de albahaca", price: "€15" }, { name: "Tabla de quesos locales con miel, mermeladas y salame local", price: "€15" }
+                    ]},
+                    { name: "Pastas", items: [
+                        { name: "Orecchiette Senatore Cappelli con brócoli silvestre, tomates cherry, anchoas y pan crujiente", price: "€11" }, { name: "Pasta Maritati Senatore Cappelli en salsa con brasciola", price: "€14" },
+                        { name: "Pasta Strascinate Senatore Cappelli con aceitunas, mousse de alcachofa, ricota y almendras", price: "€14" }, { name: "Ñoquis con pimientos, longaniza local, crema de pecorino y tarallo desmenuzado", price: "€15" },
+                        { name: "Tagliolino con pulpo, tomate datterino amarillo, tomate seco y salsa de primitivo", price: "€16" }
+                    ]},
+                    { name: "Platos Principales", items: [
+                        { name: "Salchicha \"zampina\" con papas asadas o achicoria silvestre", price: "€15" }, { name: "Bombette a la parrilla con papas asadas o achicoria silvestre", price: "€16" },
+                        { name: "Filete de lubina con zapallitos \"poverella\"", price: "€19" }, { name: "Selección de carnes rojas locales y especiales", price: "€/100gr" }
+                    ]},
+                    { name: "Acompañamientos", items: [
+                        { name: "Papas asadas", price: "€6" }, { name: "Verduras salteadas", price: "€6" }, { name: "Verduras gratinadas", price: "€6" }, { name: "Papa aplastada con queso caciocavallo derretido, capocollo, salsa de la casa", price: "€7" }
+                    ]},
+                    { name: "Postres", items: [
+                        { name: "Espuma de ricota a la lima con almendras, lemon curd y frutos rojos", price: "€7" }, { name: "Tiramisú al San Marzano", price: "€7" },
+                        { name: "Pie de limón con frutos rojos", price: "€7" }, { name: "Brownie con manjar (dulce de leche)", price: "€7" }, { name: "Semifrío artesanal", price: "€7" }
+                    ]},
+                    { name: "Vinos por Copa", items: [
+                        { name: "Copa de Vino Blanco Local", desc: "(Verdeca · Malvasia)", price: "€6" }, { name: "Copa de Vino Tinto Local", desc: "(Primitivo · Negramaro · Susumaniello)", price: "€6" },
+                        { name: "Copa de Vino D.O.C. Ostuni", desc: "(Ottavianello)", price: "€6" }, { name: "Copa de Vino Rosado Local", desc: "(Negramaro)", price: "€6" }, { name: "Copa de Espumante Local", desc: "(Vermentino)", price: "€6" }
+                    ]},
+                    { name: "Cervezas", items: [
+                        { name: "Cerveza Nastro Azzurro", price: "€4" }, { name: "Cerveza Nastro Azzurro Sin Alcohol", price: "€4,50" }, { name: "Cerveza Menabrea Rubia", price: "€5" },
+                        { name: "Cerveza Menabrea Roja", price: "€6" }, { name: "Cerveza Menabrea Weiss", price: "€6" }
+                    ]},
+                    { name: "Bebidas", items: [
+                        { name: "Coca Cola 33cl", price: "€4" }, { name: "Fanta 33cl", price: "€4" }, { name: "Agua Tónica", price: "€4" }, { name: "Lemonsoda", price: "€4" }, { name: "Jugo de naranja", price: "€4" }, { name: "Agua", price: "€3" }
+                    ]},
+                    { name: "Cócteles y Licores", items: [
+                        { name: "Spritz (Aperol o Campari)", price: "€8" }, { name: "Hugo", price: "€8" }, { name: "Limoncello Spritz", price: "€8" }, { name: "Espresso Martini", price: "€8" },
+                        { name: "Negroni", price: "€8" }, { name: "Negroni Sbagliato", price: "€8" }, { name: "Americano", price: "€8" },
+                        { name: "Gin Tonic", desc: "*Gin: Tanqueray, Gin Mare, Bombay, Hendrick’s & Gin Locale", price: "€8/15" }, { name: "Gin Lemon", desc: "*Gin: Tanqueray, Gin Mare, Bombay, Hendrick’s & Gin Locale", price: "€8/15" },
+                        { name: "Vodka Tonic", desc: "*Vodka: Moskovskaya, Belvedere & Grey Goose", price: "€8/12" }, { name: "Vodka Lemon", desc: "*Vodka: Moskovskaya, Belvedere & Grey Goose", price: "€8/12" }, { name: "Ron y Cola", price: "€8/12" }
+                    ]}
+                ], info: { cover: "Cubierto €3", allergy: "Por favor, informe al personal de cualquier alergia" }
             },
             "fr": {
                 title: "Notre Menu",
                 categories: [
                     { name: "Entrées", items: [
-                        { name: "Purée de fèves, chicorée sauvage, oignon rouge", price: "€10" },
-                        { name: "Bruschetta de pain d'Altamura, stracciatella, roquette, courgette, tomates cerises", price: "€11" },
-                        { name: "Burrata en croûte de tarallo, capocollo croustillant, pesto de tomates séchées", price: "€12" },
-                        { name: "Boulettes et brasciola locales en sauce tomate", price: "€14" },
-                        { name: "Poulpe cuit lentement, aubergines, mayonnaise au basilic", price: "€15" },
-                        { name: "Assiette de fromages locaux, miel, confitures, charcuteries locales", price: "€15" }
+                        { name: "Purée de fèves, chicorée sauvage, oignon rouge", price: "€10" }, { name: "Bruschetta de pain d'Altamura, stracciatella, roquette, courgette, tomates cerises", price: "€11" },
+                        { name: "Burrata en croûte de tarallo, capocollo croustillant, pesto de tomates séchées", price: "€12" }, { name: "Boulettes et brasciola locales en sauce tomate", price: "€14" },
+                        { name: "Poulpe cuit lentement, aubergines, mayonnaise au basilic", price: "€15" }, { name: "Assiette de fromages locaux, miel, confitures, charcuteries locales", price: "€15" }
                     ]},
                     { name: "Pâtes", items: [
-                        { name: "Orecchiette Senatore Cappelli, brocolis sauvages, tomates cerises, anchois, pain croustillant", price: "€11" },
-                        { name: "Pâtes Maritati Senatore Cappelli en sauce avec brasciola", price: "€14" },
-                        { name: "Pâtes Strascinate Senatore Cappelli, olives, mousse d'artichaut, ricotta, amande", price: "€14" },
-                        { name: "Gnocchetti, poivrons, saucisse locale, crème de pecorino, tarallo émietté", price: "€15" },
+                        { name: "Orecchiette Senatore Cappelli, brocolis sauvages, tomates cerises, anchois, pain croustillant", price: "€11" }, { name: "Pâtes Maritati Senatore Cappelli en sauce avec brasciola", price: "€14" },
+                        { name: "Pâtes Strascinate Senatore Cappelli, olives, mousse d'artichaut, ricotta, amande", price: "€14" }, { name: "Gnocchetti, poivrons, saucisse locale, crème de pecorino, tarallo émietté", price: "€15" },
                         { name: "Tagliolino au poulpe, tomate datterino jaune, tomate séchée, sauce au primitivo", price: "€16" }
                     ]},
                     { name: "Plats Principaux", items: [
-                        { name: "Saucisse \"Zampina\", pommes de terre au four ou chicorée sauvage", price: "€15" },
-                        { name: "Bombette grillées, pommes de terre au four ou chicorée sauvage", price: "€16" },
-                        { name: "Filet de bar, courgettes \"poverella\"", price: "€19" },
-                        { name: "Sélection de viandes rouges locales", price: "€/100gr" }
+                        { name: "Saucisse \"Zampina\", pommes de terre au four ou chicorée sauvage", price: "€15" }, { name: "Bombette grillées, pommes de terre au four ou chicorée sauvage", price: "€16" },
+                        { name: "Filet de bar, courgettes \"poverella\"", price: "€19" }, { name: "Sélection de viandes rouges locales", price: "€/100gr" }
                     ]},
                     { name: "Accompagnements", items: [
-                        { name: "Pommes de terre au four", price: "€6" },
-                        { name: "Légumes sautés", price: "€6" },
-                        { name: "Légumes gratinés", price: "€6" },
-                        { name: "Écrasé de pommes de terre, caciocavallo fondu, capocollo, sauce maison", price: "€7" }
+                        { name: "Pommes de terre au four", price: "€6" }, { name: "Légumes sautés", price: "€6" }, { name: "Légumes gratinés", price: "€6" }, { name: "Écrasé de pommes de terre, caciocavallo fondu, capocollo, sauce maison", price: "€7" }
                     ]},
                     { name: "Desserts", items: [
-                        { name: "Mousse de ricotta au citron vert, amandes, lemon curd, fruits rouges", price: "€7" },
-                        { name: "Tiramisu au San Marzano", price: "€7" },
-                        { name: "Tarte au citron, fruits rouges", price: "€7" },
-                        { name: "Brownie au dulce de leche", price: "€7" },
-                        { name: "Semifreddo artisanal", price: "€7" }
+                        { name: "Mousse de ricotta au citron vert, amandes, lemon curd, fruits rouges", price: "€7" }, { name: "Tiramisu au San Marzano", price: "€7" },
+                        { name: "Tarte au citron, fruits rouges", price: "€7" }, { name: "Brownie au dulce de leche", price: "€7" }, { name: "Semifreddo artisanal", price: "€7" }
                     ]},
                     { name: "Vins au Verre", items: [
-                        { name: "Verre de Vin Blanc Local", desc: "(Verdeca · Malvasia)", price: "€6" },
-                        { name: "Verre de Vin Rouge Local", desc: "(Primitivo · Negramaro · Susumaniello)", price: "€6" },
-                        { name: "Verre de Vin D.O.C. Ostuni", desc: "(Ottavianello)", price: "€6" },
-                        { name: "Verre de Vin Rosé Local", desc: "(Negramaro)", price: "€6" },
-                        { name: "Verre de Vin Mousseux Local", desc: "(Vermentino)", price: "€6" }
+                        { name: "Verre de Vin Blanc Local", desc: "(Verdeca · Malvasia)", price: "€6" }, { name: "Verre de Vin Rouge Local", desc: "(Primitivo · Negramaro · Susumaniello)", price: "€6" },
+                        { name: "Verre de Vin D.O.C. Ostuni", desc: "(Ottavianello)", price: "€6" }, { name: "Verre de Vin Rosé Local", desc: "(Negramaro)", price: "€6" }, { name: "Verre de Vin Mousseux Local", desc: "(Vermentino)", price: "€6" }
                     ]},
                     { name: "Bières", items: [
-                        { name: "Bière Nastro Azzurro", price: "€4" },
-                        { name: "Bière Nastro Azzurro Sans Alcool", price: "€4,50" },
-                        { name: "Bière Menabrea Blonde", price: "€5" },
-                        { name: "Bière Menabrea Rousse", price: "€6" },
-                        { name: "Bière Menabrea Weiss", price: "€6" }
+                        { name: "Bière Nastro Azzurro", price: "€4" }, { name: "Bière Nastro Azzurro Sans Alcool", price: "€4,50" }, { name: "Bière Menabrea Blonde", price: "€5" },
+                        { name: "Bière Menabrea Rousse", price: "€6" }, { name: "Bière Menabrea Weiss", price: "€6" }
                     ]},
                     { name: "Boissons", items: [
-                        { name: "Coca Cola 33cl", price: "€4" },
-                        { name: "Fanta 33cl", price: "€4" },
-                        { name: "Eau Tonique", price: "€4" },
-                        { name: "Lemonsoda", price: "€4" },
-                        { name: "Jus d'orange", price: "€4" },
-                        { name: "Eau", price: "€3" }
+                        { name: "Coca Cola 33cl", price: "€4" }, { name: "Fanta 33cl", price: "€4" }, { name: "Eau Tonique", price: "€4" }, { name: "Lemonsoda", price: "€4" }, { name: "Jus d'orange", price: "€4" }, { name: "Eau", price: "€3" }
                     ]},
                     { name: "Cocktails & Spiritueux", items: [
-                        { name: "Spritz (Aperol ou Campari)", price: "€8" },
-                        { name: "Hugo", price: "€8" },
-                        { name: "Limoncello Spritz", price: "€8" },
-                        { name: "Espresso Martini", price: "€8" },
-                        { name: "Negroni", price: "€8" },
-                        { name: "Negroni Sbagliato", price: "€8" },
-                        { name: "Americano", price: "€8" },
-                        { name: "Gin Tonic", desc: "*Gin: Tanqueray, Gin Mare, Bombay, Hendrick’s & Gin Locale", price: "€8/15" },
-                        { name: "Gin Lemon", desc: "*Gin: Tanqueray, Gin Mare, Bombay, Hendrick’s & Gin Locale", price: "€8/15" },
-                        { name: "Vodka Tonic", desc: "*Vodka: Moskovskaya, Belvedere & Grey Goose", price: "€8/12" },
-                        { name: "Vodka Lemon", desc: "*Vodka: Moskovskaya, Belvedere & Grey Goose", price: "€8/12" },
-                        { name: "Rhum & Cola", price: "€8/12" }
+                        { name: "Spritz (Aperol ou Campari)", price: "€8" }, { name: "Hugo", price: "€8" }, { name: "Limoncello Spritz", price: "€8" }, { name: "Espresso Martini", price: "€8" },
+                        { name: "Negroni", price: "€8" }, { name: "Negroni Sbagliato", price: "€8" }, { name: "Americano", price: "€8" },
+                        { name: "Gin Tonic", desc: "*Gin: Tanqueray, Gin Mare, Bombay, Hendrick’s & Gin Locale", price: "€8/15" }, { name: "Gin Lemon", desc: "*Gin: Tanqueray, Gin Mare, Bombay, Hendrick’s & Gin Locale", price: "€8/15" },
+                        { name: "Vodka Tonic", desc: "*Vodka: Moskovskaya, Belvedere & Grey Goose", price: "€8/12" }, { name: "Vodka Lemon", desc: "*Vodka: Moskovskaya, Belvedere & Grey Goose", price: "€8/12" }, { name: "Rhum & Cola", price: "€8/12" }
                     ]}
-                ],
-                info: { cover: "Couvert €3", allergy: "Veuillez informer le personnel de toute allergie" }
+                ], info: { cover: "Couvert €3", allergy: "Veuillez informer le personnel de toute allergie" }
             },
             "de": {
                 title: "Unser Menü",
                 categories: [
                     { name: "Vorspeisen", items: [
-                        { name: "Ackerbohnenpüree mit wilder Zichorie und roter Zwiebel", price: "€10" },
-                        { name: "Bruschetta (Altamura-Brot) mit Stracciatella, Rucola, Zucchini, Kirschtomaten", price: "€11" },
-                        { name: "Burrata in Tarallo-Kruste mit knusprigem Capocollo und Tomatenpesto", price: "€12" },
-                        { name: "Lokale Fleischbällchen und Brasciola in Tomatensauce", price: "€14" },
-                        { name: "Langsam gegarter Oktopus mit Auberginen, Basilikum-Mayo", price: "€15" },
-                        { name: "Lokale Käseplatte mit Honig, Marmeladen, lokaler Salami", price: "€15" }
+                        { name: "Ackerbohnenpüree mit wilder Zichorie und roter Zwiebel", price: "€10" }, { name: "Bruschetta (Altamura-Brot) mit Stracciatella, Rucola, Zucchini, Kirschtomaten", price: "€11" },
+                        { name: "Burrata in Tarallo-Kruste mit knusprigem Capocollo und Tomatenpesto", price: "€12" }, { name: "Lokale Fleischbällchen und Brasciola in Tomatensauce", price: "€14" },
+                        { name: "Langsam gegarter Oktopus mit Auberginen, Basilikum-Mayo", price: "€15" }, { name: "Lokale Käseplatte mit Honig, Marmeladen, lokaler Salami", price: "€15" }
                     ]},
                     { name: "Pasta", items: [
-                        { name: "Orecchiette mit wildem Brokkoli, Kirschtomaten, Sardellen, knusprigem Brot", price: "€11" },
-                        { name: "Maritati-Pasta mit Brasciola in Tomatensauce", price: "€14" },
-                        { name: "Strascinate-Pasta mit Oliven, Artischockenmousse, Ricotta, Mandeln", price: "€14" },
-                        { name: "Gnocchetti mit Paprika, lokaler Wurst, Pecorino-Creme, zerbröseltem Tarallo", price: "€15" },
+                        { name: "Orecchiette mit wildem Brokkoli, Kirschtomaten, Sardellen, knusprigem Brot", price: "€11" }, { name: "Maritati-Pasta mit Brasciola in Tomatensauce", price: "€14" },
+                        { name: "Strascinate-Pasta mit Oliven, Artischockenmousse, Ricotta, Mandeln", price: "€14" }, { name: "Gnocchetti mit Paprika, lokaler Wurst, Pecorino-Creme, zerbröseltem Tarallo", price: "€15" },
                         { name: "Tagliolino-Pasta mit Oktopus, gelben Datterini-Tomaten, Primitivo-Sauce", price: "€16" }
                     ]},
                     { name: "Hauptgerichte", items: [
-                        { name: "\"Zampina\" Wurst mit Ofenkartoffeln oder wilder Zichorie", price: "€15" },
-                        { name: "Gegrillte \"Bombette\" mit Ofenkartoffeln oder wilder Zichorie", price: "€16" },
-                        { name: "Wolfsbarschfilet mit \"poverella\" Zucchini", price: "€19" },
-                        { name: "Auswahl an lokalem rotem Fleisch", price: "€/100gr" }
+                        { name: "\"Zampina\" Wurst mit Ofenkartoffeln oder wilder Zichorie", price: "€15" }, { name: "Gegrillte \"Bombette\" mit Ofenkartoffeln oder wilder Zichorie", price: "€16" },
+                        { name: "Wolfsbarschfilet mit \"poverella\" Zucchini", price: "€19" }, { name: "Auswahl an lokalem rotem Fleisch", price: "€/100gr" }
                     ]},
                     { name: "Beilagen", items: [
-                        { name: "Ofenkartoffeln", price: "€6" },
-                        { name: "Sautiertes Gemüse", price: "€6" },
-                        { name: "Überbackenes Gemüse", price: "€6" },
-                        { name: "Kartoffelstampf mit geschmolzenem Caciocavallo, Capocollo, Haussauce", price: "€7" }
+                        { name: "Ofenkartoffeln", price: "€6" }, { name: "Sautiertes Gemüse", price: "€6" }, { name: "Überbackenes Gemüse", price: "€6" }, { name: "Kartoffelstampf mit geschmolzenem Caciocavallo, Capocollo, Haussauce", price: "€7" }
                     ]},
                     { name: "Desserts", items: [
-                        { name: "Limetten-Ricotta-Schaum mit Mandeln, Lemon Curd, roten Früchten", price: "€7" },
-                        { name: "San Marzano Tiramisu", price: "€7" },
-                        { name: "Zitronenkuchen mit roten Früchten", price: "€7" },
-                        { name: "Brownie mit Dulce de Leche", price: "€7" },
-                        { name: "Hausgemachtes Semifreddo", price: "€7" }
+                        { name: "Limetten-Ricotta-Schaum mit Mandeln, Lemon Curd, roten Früchten", price: "€7" }, { name: "San Marzano Tiramisu", price: "€7" },
+                        { name: "Zitronenkuchen mit roten Früchten", price: "€7" }, { name: "Brownie mit Dulce de Leche", price: "€7" }, { name: "Hausgemachtes Semifreddo", price: "€7" }
                     ]},
                     { name: "Offene Weine", items: [
-                        { name: "Glas lokaler Weißwein", desc: "(Verdeca · Malvasia)", price: "€6" },
-                        { name: "Glas lokaler Rotwein", desc: "(Primitivo · Negramaro · Susumaniello)", price: "€6" },
-                        { name: "Glas Ostuni D.O.C Wein", desc: "(Ottavianello)", price: "€6" },
-                        { name: "Glas lokaler Roséwein", desc: "(Negramaro)", price: "€6" },
-                        { name: "Glas lokaler Sekt", desc: "(Vermentino)", price: "€6" }
+                        { name: "Glas lokaler Weißwein", desc: "(Verdeca · Malvasia)", price: "€6" }, { name: "Glas lokaler Rotwein", desc: "(Primitivo · Negramaro · Susumaniello)", price: "€6" },
+                        { name: "Glas Ostuni D.O.C Wein", desc: "(Ottavianello)", price: "€6" }, { name: "Glas lokaler Roséwein", desc: "(Negramaro)", price: "€6" }, { name: "Glas lokaler Sekt", desc: "(Vermentino)", price: "€6" }
                     ]},
                     { name: "Biere", items: [
-                        { name: "Nastro Azzurro Bier", price: "€4" },
-                        { name: "Nastro Azzurro Alkoholfreies Bier", price: "€4,50" },
-                        { name: "Menabrea Helles Bier", price: "€5" },
-                        { name: "Menabrea Rotes Bier", price: "€6" },
-                        { name: "Menabrea Weissbier", price: "€6" }
+                        { name: "Nastro Azzurro Bier", price: "€4" }, { name: "Nastro Azzurro Alkoholfrei", price: "€4,50" }, { name: "Menabrea Helles Bier", price: "€5" },
+                        { name: "Menabrea Rotes Bier", price: "€6" }, { name: "Menabrea Weissbier", price: "€6" }
                     ]},
                     { name: "Getränke", items: [
-                        { name: "Coca Cola 33cl", price: "€4" },
-                        { name: "Fanta 33cl", price: "€4" },
-                        { name: "Tonic Water", price: "€4" },
-                        { name: "Lemonsoda", price: "€4" },
-                        { name: "Orangensaft", price: "€4" },
-                        { name: "Wasser", price: "€3" }
+                        { name: "Coca Cola 33cl", price: "€4" }, { name: "Fanta 33cl", price: "€4" }, { name: "Tonic Water", price: "€4" }, { name: "Lemonsoda", price: "€4" }, { name: "Orangensaft", price: "€4" }, { name: "Wasser", price: "€3" }
                     ]},
                     { name: "Cocktails & Spirituosen", items: [
-                        { name: "Spritz (Aperol oder Campari)", price: "€8" },
-                        { name: "Hugo", price: "€8" },
-                        { name: "Limoncello Spritz", price: "€8" },
-                        { name: "Espresso Martini", price: "€8" },
-                        { name: "Negroni", price: "€8" },
-                        { name: "Negroni Sbagliato", price: "€8" },
-                        { name: "Americano", price: "€8" },
-                        { name: "Gin Tonic", desc: "*Gin: Tanqueray, Gin Mare, Bombay, Hendrick’s & Gin Locale", price: "€8/15" },
-                        { name: "Gin Lemon", desc: "*Gin: Tanqueray, Gin Mare, Bombay, Hendrick’s & Gin Locale", price: "€8/15" },
-                        { name: "Vodka Tonic", desc: "*Vodka: Moskovskaya, Belvedere & Grey Goose", price: "€8/12" },
-                        { name: "Vodka Lemon", desc: "*Vodka: Moskovskaya, Belvedere & Grey Goose", price: "€8/12" },
-                        { name: "Rum & Cola", price: "€8/12" }
+                        { name: "Spritz (Aperol oder Campari)", price: "€8" }, { name: "Hugo", price: "€8" }, { name: "Limoncello Spritz", price: "€8" }, { name: "Espresso Martini", price: "€8" },
+                        { name: "Negroni", price: "€8" }, { name: "Negroni Sbagliato", price: "€8" }, { name: "Americano", price: "€8" },
+                        { name: "Gin Tonic", desc: "*Gin: Tanqueray, Gin Mare, Bombay, Hendrick’s & Gin Locale", price: "€8/15" }, { name: "Gin Lemon", desc: "*Gin: Tanqueray, Gin Mare, Bombay, Hendrick’s & Gin Locale", price: "€8/15" },
+                        { name: "Vodka Tonic", desc: "*Vodka: Moskovskaya, Belvedere & Grey Goose", price: "€8/12" }, { name: "Vodka Lemon", desc: "*Vodka: Moskovskaya, Belvedere & Grey Goose", price: "€8/12" }, { name: "Rum & Cola", price: "€8/12" }
                     ]}
-                ],
-                info: { cover: "Gedeck €3", allergy: "Bitte informieren Sie das Personal über Allergien" }
+                ], info: { cover: "Gedeck €3", allergy: "Bitte informieren Sie das Personal über Allergien" }
+            },
+            "nl": {
+                title: "Ons Menu",
+                categories: [
+                    { name: "Voorgerechten", items: [
+                        { name: "Tuinbonenpuree met wilde cichorei en rode ui", price: "€10" }, { name: "Bruschetta van Altamura-brood met stracciatella, rucola, courgette, kerstomaatjes", price: "€11" },
+                        { name: "Burrata in tarallo-korst met knapperige capocollo en zongedroogde tomatenpesto", price: "€12" }, { name: "Lokale gehaktballetjes en brasciola in tomatensaus", price: "€14" },
+                        { name: "Langzaam gegaarde inktvis met aubergine en basilicummayonaise", price: "€15" }, { name: "Lokaal kaasplateau met honing, jam en lokale salami", price: "€15" }
+                    ]},
+                    { name: "Pasta's", items: [
+                        { name: "Orecchiette met wilde broccoli, verse kerstomaatjes, ansjovis en knapperig brood", price: "€11" }, { name: "Maritati pasta met brasciola in tomatensaus", price: "€14" },
+                        { name: "Strascinate pasta met olijven, artisjokmousse, ricotta en amandel", price: "€14" }, { name: "Gnocchetti met paprika, lokale worst, pecorinocrème en verkruimelde tarallo", price: "€15" },
+                        { name: "Tagliolino pasta met inktvis, gele datterino tomaat, zongedroogde tomaat en primitivo-saus", price: "€16" }
+                    ]},
+                    { name: "Hoofdgerechten", items: [
+                        { name: "\"Zampina\" worst met gebakken aardappelen of wilde cichorei", price: "€15" }, { name: "Gegrilde \"bombette\" met gebakken aardappelen of wilde cichorei", price: "€16" },
+                        { name: "Zeebaarsfilet met \"poverella\" courgette", price: "€19" }, { name: "Selectie van lokaal rood vlees", price: "€/100gr" }
+                    ]},
+                    { name: "Bijgerechten", items: [
+                        { name: "Gebakken aardappelen", price: "€6" }, { name: "Gesauteerde groenten", price: "€6" }, { name: "Gegratineerde groenten", price: "€6" }, { name: "Geplette aardappel met gesmolten caciocavallo kaas, capocollo, huissaus", price: "€7" }
+                    ]},
+                    { name: "Desserts", items: [
+                        { name: "Limoen-ricottaschuim met knapperige amandelen, lemon curd en rode vruchten", price: "€7" }, { name: "San Marzano Tiramisu", price: "€7" },
+                        { name: "Citroentaart met rode vruchten", price: "€7" }, { name: "Brownie met dulce de leche", price: "€7" }, { name: "Ambachtelijke semifreddo", price: "€7" }
+                    ]},
+                    { name: "Wijnen per glas", items: [
+                        { name: "Glas lokale witte wijn", desc: "(Verdeca · Malvasia)", price: "€6" }, { name: "Glas lokale rode wijn", desc: "(Primitivo · Negramaro · Susumaniello)", price: "€6" },
+                        { name: "Glas Ostuni D.O.C wijn", desc: "(Ottavianello)", price: "€6" }, { name: "Glas lokale rosé wijn", desc: "(Negramaro)", price: "€6" }, { name: "Glas lokale mousserende wijn", desc: "(Vermentino)", price: "€6" }
+                    ]},
+                    { name: "Bieren", items: [
+                        { name: "Nastro Azzurro Bier", price: "€4" }, { name: "Nastro Azzurro Alcoholvrij Bier", price: "€4,50" }, { name: "Menabrea Blond Bier", price: "€5" },
+                        { name: "Menabrea Rood Bier", price: "€6" }, { name: "Menabrea Weiss Bier", price: "€6" }
+                    ]},
+                    { name: "Frisdranken", items: [
+                        { name: "Coca Cola 33cl", price: "€4" }, { name: "Fanta 33cl", price: "€4" }, { name: "Tonic", price: "€4" }, { name: "Lemonsoda", price: "€4" }, { name: "Sinaasappelsap", price: "€4" }, { name: "Water", price: "€3" }
+                    ]},
+                    { name: "Cocktails & Gedistilleerd", items: [
+                        { name: "Spritz (Aperol of Campari)", price: "€8" }, { name: "Hugo", price: "€8" }, { name: "Limoncello Spritz", price: "€8" }, { name: "Espresso Martini", price: "€8" },
+                        { name: "Negroni", price: "€8" }, { name: "Negroni Sbagliato", price: "€8" }, { name: "Americano", price: "€8" },
+                        { name: "Gin Tonic", desc: "*Gin: Tanqueray, Gin Mare, Bombay, Hendrick’s & Gin Locale", price: "€8/15" }, { name: "Gin Lemon", desc: "*Gin: Tanqueray, Gin Mare, Bombay, Hendrick’s & Gin Locale", price: "€8/15" },
+                        { name: "Vodka Tonic", desc: "*Vodka: Moskovskaya, Belvedere & Grey Goose", price: "€8/12" }, { name: "Vodka Lemon", desc: "*Vodka: Moskovskaya, Belvedere & Grey Goose", price: "€8/12" }, { name: "Rum & Cola", price: "€8/12" }
+                    ]}
+                ], info: { cover: "Couvert €3", allergy: "Informeer het personeel over eventuele allergieën" }
+            },
+            "pt": {
+                title: "O Nosso Menu",
+                categories: [
+                    { name: "Entradas", items: [
+                        { name: "Puré de favas com chicória selvagem e cebola roxa", price: "€10" }, { name: "Bruschetta de pão de Altamura com stracciatella, rúcula, curgete, tomate cereja", price: "€11" },
+                        { name: "Burrata em crosta de tarallo com capocollo estaladiço e pesto de tomate seco", price: "€12" }, { name: "Almôndegas e brasciola locais com molho de tomate", price: "€14" },
+                        { name: "Polvo cozinhado lentamente com beringela e maionese de manjericão", price: "€15" }, { name: "Tábua de queijos locais com mel, compotas e salame local", price: "€15" }
+                    ]},
+                    { name: "Massas", items: [
+                        { name: "Orecchiette com brócolos selvagens, tomate cereja, anchovas e pão estaladiço", price: "€11" }, { name: "Massa Maritati com brasciola em molho de tomate", price: "€14" },
+                        { name: "Massa Strascinate com azeitonas, mousse de alcachofra, ricotta e amêndoa", price: "€14" }, { name: "Gnocchetti com pimentos, salsicha local, creme de pecorino e tarallo desfeito", price: "€15" },
+                        { name: "Tagliolino com polvo, tomate datterino amarelo, tomate seco e molho de primitivo", price: "€16" }
+                    ]},
+                    { name: "Pratos Principais", items: [
+                        { name: "Salsicha \"zampina\" com batatas no forno ou chicória selvagem", price: "€15" }, { name: "Bombette grelhadas com batatas no forno ou chicória selvagem", price: "€16" },
+                        { name: "Filete de robalo com curgetes \"poverella\"", price: "€19" }, { name: "Seleção de carnes vermelhas locais", price: "€/100gr" }
+                    ]},
+                    { name: "Acompanhamentos", items: [
+                        { name: "Batatas no forno", price: "€6" }, { name: "Legumes salteados", price: "€6" }, { name: "Legumes gratinados", price: "€6" }, { name: "Esmagada de batata com queijo caciocavallo derretido, capocollo, molho da casa", price: "€7" }
+                    ]},
+                    { name: "Sobremesas", items: [
+                        { name: "Espuma de ricota com lima, amêndoas estaladiças, lemon curd e frutos vermelhos", price: "€7" }, { name: "Tiramisù al San Marzano", price: "€7" },
+                        { name: "Tarte de limão com frutos vermelhos", price: "€7" }, { name: "Brownie com doce de leite", price: "€7" }, { name: "Semifreddo artesanal", price: "€7" }
+                    ]},
+                    { name: "Vinhos a Copo", items: [
+                        { name: "Copo de Vinho Branco Local", desc: "(Verdeca · Malvasia)", price: "€6" }, { name: "Copo de Vinho Tinto Local", desc: "(Primitivo · Negramaro · Susumaniello)", price: "€6" },
+                        { name: "Copo de Vinho D.O.C. Ostuni", desc: "(Ottavianello)", price: "€6" }, { name: "Copo de Vinho Rosé Local", desc: "(Negramaro)", price: "€6" }, { name: "Copo de Espumante Local", desc: "(Vermentino)", price: "€6" }
+                    ]},
+                    { name: "Cervejas", items: [
+                        { name: "Cerveja Nastro Azzurro", price: "€4" }, { name: "Cerveja Nastro Azzurro Sem Álcool", price: "€4,50" }, { name: "Cerveja Menabrea Loira", price: "€5" },
+                        { name: "Cerveja Menabrea Ruiva", price: "€6" }, { name: "Cerveja Menabrea Weiss", price: "€6" }
+                    ]},
+                    { name: "Bebidas", items: [
+                        { name: "Coca Cola 33cl", price: "€4" }, { name: "Fanta 33cl", price: "€4" }, { name: "Água Tónica", price: "€4" }, { name: "Lemonsoda", price: "€4" }, { name: "Sumo de laranja", price: "€4" }, { name: "Água", price: "€3" }
+                    ]},
+                    { name: "Cocktails e Destilados", items: [
+                        { name: "Spritz (Aperol ou Campari)", price: "€8" }, { name: "Hugo", price: "€8" }, { name: "Limoncello Spritz", price: "€8" }, { name: "Espresso Martini", price: "€8" },
+                        { name: "Negroni", price: "€8" }, { name: "Negroni Sbagliato", price: "€8" }, { name: "Americano", price: "€8" },
+                        { name: "Gin Tonic", desc: "*Gin: Tanqueray, Gin Mare, Bombay, Hendrick’s & Gin Locale", price: "€8/15" }, { name: "Gin Lemon", desc: "*Gin: Tanqueray, Gin Mare, Bombay, Hendrick’s & Gin Locale", price: "€8/15" },
+                        { name: "Vodka Tonic", desc: "*Vodka: Moskovskaya, Belvedere & Grey Goose", price: "€8/12" }, { name: "Vodka Lemon", desc: "*Vodka: Moskovskaya, Belvedere & Grey Goose", price: "€8/12" }, { name: "Rum com Cola", price: "€8/12" }
+                    ]}
+                ], info: { cover: "Couvert €3", allergy: "Por favor, informe os funcionários sobre quaisquer alergias" }
+            },
+            "pt-BR": {
+                title: "Nosso Cardápio",
+                categories: [
+                    { name: "Entradas", items: [
+                        { name: "Purê de favas com chicória selvagem e cebola roxa", price: "€10" }, { name: "Bruschetta de pão de Altamura com stracciatella, rúcula, abobrinha, tomates cereja", price: "€11" },
+                        { name: "Burrata em crosta de tarallo com capocollo crocante e pesto de tomate seco", price: "€12" }, { name: "Almôndegas e brasciola locais ao molho de tomate", price: "€14" },
+                        { name: "Polvo cozido lentamente com berinjela e maionese de manjericão", price: "€15" }, { name: "Tábua de queijos locais com mel, geleias e salame local", price: "€15" }
+                    ]},
+                    { name: "Massas", items: [
+                        { name: "Orecchiette com brócolis selvagem, tomate cereja, anchovas e pão crocante", price: "€11" }, { name: "Massa Maritati com brasciola ao molho de tomate", price: "€14" },
+                        { name: "Massa Strascinate com azeitonas, mousse de alcachofra, ricota e amêndoa", price: "€14" }, { name: "Gnocchetti com pimentões, linguiça local, creme de pecorino e tarallo esfarelado", price: "€15" },
+                        { name: "Tagliolino com polvo, tomate datterino amarelo, tomate seco e molho de primitivo", price: "€16" }
+                    ]},
+                    { name: "Pratos Principais", items: [
+                        { name: "Linguiça \"zampina\" na brasa com batatas assadas ou chicória selvagem", price: "€15" }, { name: "Bombette na brasa com batatas assadas ou chicória selvagem", price: "€16" },
+                        { name: "Filé de robalo com abobrinhas \"poverella\"", price: "€19" }, { name: "Seleção de carnes vermelhas locais", price: "€/100gr" }
+                    ]},
+                    { name: "Acompanhamentos", items: [
+                        { name: "Batatas assadas", price: "€6" }, { name: "Legumes salteados", price: "€6" }, { name: "Legumes gratinados", price: "€6" }, { name: "Batata amassada com queijo caciocavallo derretido, capocollo, molho da casa", price: "€7" }
+                    ]},
+                    { name: "Sobremesas", items: [
+                        { name: "Espuma de ricota com limão siciliano, amêndoas crocantes, lemon curd e frutas vermelhas", price: "€7" }, { name: "Tiramisù al San Marzano", price: "€7" },
+                        { name: "Torta de limão com frutas vermelhas", price: "€7" }, { name: "Brownie com doce de leite", price: "€7" }, { name: "Semifreddo artesanal", price: "€7" }
+                    ]},
+                    { name: "Vinhos em Taça", items: [
+                        { name: "Taça de Vinho Branco Local", desc: "(Verdeca · Malvasia)", price: "€6" }, { name: "Taça de Vinho Tinto Local", desc: "(Primitivo · Negramaro · Susumaniello)", price: "€6" },
+                        { name: "Taça de Vinho D.O.C. Ostuni", desc: "(Ottavianello)", price: "€6" }, { name: "Taça de Vinho Rosé Local", desc: "(Negramaro)", price: "€6" }, { name: "Taça de Espumante Local", desc: "(Vermentino)", price: "€6" }
+                    ]},
+                    { name: "Cervejas", items: [
+                        { name: "Cerveja Nastro Azzurro", price: "€4" }, { name: "Cerveja Nastro Azzurro Sem Álcool", price: "€4,50" }, { name: "Cerveja Menabrea Clara", price: "€5" },
+                        { name: "Cerveza Menabrea Vermelha", price: "€6" }, { name: "Cerveja Menabrea Weiss", price: "€6" }
+                    ]},
+                    { name: "Bebidas", items: [
+                        { name: "Coca Cola 33cl", price: "€4" }, { name: "Fanta 33cl", price: "€4" }, { name: "Água Tônica", price: "€4" }, { name: "Lemonsoda", price: "€4" }, { name: "Suco de laranja", price: "€4" }, { name: "Água", price: "€3" }
+                    ]},
+                    { name: "Coquetéis e Destilados", items: [
+                        { name: "Spritz (Aperol ou Campari)", price: "€8" }, { name: "Hugo", price: "€8" }, { name: "Limoncello Spritz", price: "€8" }, { name: "Espresso Martini", price: "€8" },
+                        { name: "Negroni", price: "€8" }, { name: "Negroni Sbagliato", price: "€8" }, { name: "Americano", price: "€8" },
+                        { name: "Gin Tonic", desc: "*Gin: Tanqueray, Gin Mare, Bombay, Hendrick’s & Gin Locale", price: "€8/15" }, { name: "Gin Lemon", desc: "*Gin: Tanqueray, Gin Mare, Bombay, Hendrick’s & Gin Locale", price: "€8/15" },
+                        { name: "Vodka Tonic", desc: "*Vodka: Moskovskaya, Belvedere & Grey Goose", price: "€8/12" }, { name: "Vodka Lemon", desc: "*Vodka: Moskovskaya, Belvedere & Grey Goose", price: "€8/12" }, { name: "Rum com Cola", price: "€8/12" }
+                    ]}
+                ], info: { cover: "Couvert €3", allergy: "Por favor, informe a equipe sobre quaisquer alergias" }
+            },
+            "fi": {
+                title: "Ruokalistamme",
+                categories: [
+                    { name: "Alkuruoat", items: [
+                        { name: "Härkäpapusose villisikurin ja punasipulin kera", price: "€10" }, { name: "Altamura-leipäbruschetta stracciatellalla, rucolalla, kesäkurpitsalla ja kirsikkatomaateilla", price: "€11" },
+                        { name: "Burrata-juustoa tarallo-kuoressa, rapeaa capocolloa ja aurinkokuivattua tomaattipestoa", price: "€12" }, { name: "Paikallisia lihapullia ja brasciolaa tomaattikastikkeessa", price: "€14" },
+                        { name: "Hitaasti kypsennettyä mustekalaa, munakoisoa ja basilika-majoneesia", price: "€15" }, { name: "Paikallinen juustolautanen hunajalla, hilloilla ja paikallisella salamilla", price: "€15" }
+                    ]},
+                    { name: "Pastat", items: [
+                        { name: "Orecchiette-pastaa villiparsakaalilla, kirsikkatomaateilla, anjoviksella ja rapealla leivällä", price: "€11" }, { name: "Maritati-pastaa brasciola-kastikkeessa", price: "€14" },
+                        { name: "Strascinate-pastaa oliiveilla, artisokkamoussella, ricottalla ja mantelilla", price: "€14" }, { name: "Gnoccheja paprikan, paikallisen makkaran, pecorino-kerman ja murennetun tarallon kera", price: "€15" },
+                        { name: "Tagliolino-pastaa mustekalalla, keltaisella datterino-tomaatilla, aurinkokuivatulla tomaatilla ja primitivo-kastikkeella", price: "€16" }
+                    ]},
+                    { name: "Pääruoat", items: [
+                        { name: "\"Zampina\"-makkaraa uuniperunoiden tai villisikurin kera", price: "€15" }, { name: "Grillattuja \"bombette\"-liharullia uuniperunoiden tai villisikurin kera", price: "€16" },
+                        { name: "Meribassifilee \"poverella\"-kesäkurpitsan kera", price: "€19" }, { name: "Valikoima paikallista punaista lihaa", price: "€/100gr" }
+                    ]},
+                    { name: "Lisukkeet", items: [
+                        { name: "Uuniperunat", price: "€6" }, { name: "Paistetut vihannekset", price: "€6" }, { name: "Gratinoidut vihannekset", price: "€6" }, { name: "Murskattua perunaa, sulatettua caciocavalloa, capocolloa, talon kastike", price: "€7" }
+                    ]},
+                    { name: "Jälkiruoat", items: [
+                        { name: "Lime-ricottavaahtoa, manteleita, lemon curdia ja punaisia marjoja", price: "€7" }, { name: "San Marzano Tiramisu", price: "€7" },
+                        { name: "Sitruunapiirakka punaisilla marjoilla", price: "€7" }, { name: "Brownie dulce de lechen kera", price: "€7" }, { name: "Käsintehty semifreddo", price: "€7" }
+                    ]},
+                    { name: "Viinit laseittain", items: [
+                        { name: "Lasi paikallista valkoviiniä", desc: "(Verdeca · Malvasia)", price: "€6" }, { name: "Lasi paikallista punaviiniä", desc: "(Primitivo · Negramaro · Susumaniello)", price: "€6" },
+                        { name: "Lasi Ostuni D.O.C -viiniä", desc: "(Ottavianello)", price: "€6" }, { name: "Lasi paikallista roseeviiniä", desc: "(Negramaro)", price: "€6" }, { name: "Lasi paikallista kuohuviiniä", desc: "(Vermentino)", price: "€6" }
+                    ]},
+                    { name: "Oluet", items: [
+                        { name: "Nastro Azzurro Olut", price: "€4" }, { name: "Nastro Azzurro Alkoholiton", price: "€4,50" }, { name: "Menabrea Vaalea Olut", price: "€5" },
+                        { name: "Menabrea Punainen Olut", price: "€6" }, { name: "Menabrea Weiss Olut", price: "€6" }
+                    ]},
+                    { name: "Virvoitusjuomat", items: [
+                        { name: "Coca Cola 33cl", price: "€4" }, { name: "Fanta 33cl", price: "€4" }, { name: "Tonic-vesi", price: "€4" }, { name: "Lemonsoda", price: "€4" }, { name: "Appelsiinimehu", price: "€4" }, { name: "Vesi", price: "€3" }
+                    ]},
+                    { name: "Cocktailit", items: [
+                        { name: "Spritz (Aperol tai Campari)", price: "€8" }, { name: "Hugo", price: "€8" }, { name: "Limoncello Spritz", price: "€8" }, { name: "Espresso Martini", price: "€8" },
+                        { name: "Negroni", price: "€8" }, { name: "Negroni Sbagliato", price: "€8" }, { name: "Americano", price: "€8" },
+                        { name: "Gin Tonic", desc: "*Gin: Tanqueray, Gin Mare, Bombay, Hendrick’s & Gin Locale", price: "€8/15" }, { name: "Gin Lemon", desc: "*Gin: Tanqueray, Gin Mare, Bombay, Hendrick’s & Gin Locale", price: "€8/15" },
+                        { name: "Vodka Tonic", desc: "*Vodka: Moskovskaya, Belvedere & Grey Goose", price: "€8/12" }, { name: "Vodka Lemon", desc: "*Vodka: Moskovskaya, Belvedere & Grey Goose", price: "€8/12" }, { name: "Rommi ja Cola", price: "€8/12" }
+                    ]}
+                ], info: { cover: "Kattausmaksu €3", allergy: "Ilmoitathan henkilökunnalle mahdollisista allergioista" }
+            },
+            "ru": {
+                title: "Наше Меню",
+                categories: [
+                    { name: "Закуски", items: [
+                        { name: "Пюре из бобов фава с диким цикорием и красным луком", price: "€10" }, { name: "Брускетта из хлеба Альтамура с страччателлой, рукколой, цуккини и черри", price: "€11" },
+                        { name: "Буррата в корочке таралло с хрустящим капоколло и песто из вяленых томатов", price: "€12" }, { name: "Местные фрикадельки и брашола в томатном соусе", price: "€14" },
+                        { name: "Осьминог медленного приготовления с баклажанами и базиликовым майонезом", price: "€15" }, { name: "Сырная тарелка с медом, джемом и местной салями", price: "€15" }
+                    ]},
+                    { name: "Паста", items: [
+                        { name: "Орекьетте с дикой брокколи, свежими черри, анчоусами и хрустящим хлебом", price: "€11" }, { name: "Паста маритати в томатном соусе с брашолой", price: "€14" },
+                        { name: "Паста стращинате с оливками, муссом из артишоков, рикоттой и миндалем", price: "€14" }, { name: "Ньоккетти с перцем, местной колбасой, кремом из пекорино и крошкой таралло", price: "€15" },
+                        { name: "Тальолино с осьминогом, желтыми томатами даттерино, вялеными томатами и соусом примитиво", price: "€16" }
+                    ]},
+                    { name: "Основные блюда", items: [
+                        { name: "Колбаска \"Дзампина\" с запеченным картофелем или диким цикорием", price: "€15" }, { name: "Жареные рулетики \"бомбетте\" с запеченным картофелем или диким цикорием", price: "€16" },
+                        { name: "Филе сибаса с цуккини \"поверелла\"", price: "€19" }, { name: "Ассорти местного красного мяса", price: "€/100гр" }
+                    ]},
+                    { name: "Гарниры", items: [
+                        { name: "Запеченный картофель", price: "€6" }, { name: "Овощи соте", price: "€6" }, { name: "Овощи гратен", price: "€6" }, { name: "Толченый картофель с расплавленным сыром качокавалло, капоколло, фирменный соус", price: "€7" }
+                    ]},
+                    { name: "Десерты", items: [
+                        { name: "Лаймовый мусс из рикотты с хрустящим миндалем, лимонным курдом и красными ягодами", price: "€7" }, { name: "Тирамису Сан-Марцано", price: "€7" },
+                        { name: "Лимонный пай с красными ягодами", price: "€7" }, { name: "Брауни с дульсе де лече", price: "€7" }, { name: "Домашнее семифредо", price: "€7" }
+                    ]},
+                    { name: "Вино по бокалам", items: [
+                        { name: "Бокал местного белого вина", desc: "(Verdeca · Malvasia)", price: "€6" }, { name: "Бокал местного красного вина", desc: "(Primitivo · Negramaro · Susumaniello)", price: "€6" },
+                        { name: "Бокал вина Ostuni D.O.C", desc: "(Ottavianello)", price: "€6" }, { name: "Бокал местного розового вина", desc: "(Negramaro)", price: "€6" }, { name: "Бокал местного игристого вина", desc: "(Vermentino)", price: "€6" }
+                    ]},
+                    { name: "Пиво", items: [
+                        { name: "Пиво Nastro Azzurro", price: "€4" }, { name: "Безалкогольное пиво Nastro Azzurro", price: "€4,50" }, { name: "Светлое пиво Menabrea", price: "€5" },
+                        { name: "Красное пиво Menabrea", price: "€6" }, { name: "Пшеничное пиво Menabrea Weiss", price: "€6" }
+                    ]},
+                    { name: "Напитки", items: [
+                        { name: "Coca Cola 33cl", price: "€4" }, { name: "Fanta 33cl", price: "€4" }, { name: "Тоник", price: "€4" }, { name: "Lemonsoda", price: "€4" }, { name: "Апельсиновый сок", price: "€4" }, { name: "Вода", price: "€3" }
+                    ]},
+                    { name: "Коктейли", items: [
+                        { name: "Спритц (Aperol или Campari)", price: "€8" }, { name: "Hugo", price: "€8" }, { name: "Limoncello Spritz", price: "€8" }, { name: "Espresso Martini", price: "€8" },
+                        { name: "Negroni", price: "€8" }, { name: "Negroni Sbagliato", price: "€8" }, { name: "Americano", price: "€8" },
+                        { name: "Джин Тоник", desc: "*Джин: Tanqueray, Gin Mare, Bombay, Hendrick’s & Местный джин", price: "€8/15" }, { name: "Джин Лимон", desc: "*Джин: Tanqueray, Gin Mare, Bombay, Hendrick’s & Местный джин", price: "€8/15" },
+                        { name: "Водка Тоник", desc: "*Водка: Moskovskaya, Belvedere & Grey Goose", price: "€8/12" }, { name: "Водка Лимон", desc: "*Водка: Moskovskaya, Belvedere & Grey Goose", price: "€8/12" }, { name: "Ром и Кола", price: "€8/12" }
+                    ]}
+                ], info: { cover: "Обслуживание €3", allergy: "Пожалуйста, сообщите персоналу о наличии аллергии" }
+            },
+            "hi": {
+                title: "हमारा मेनू",
+                categories: [
+                    { name: "शुरुआती (Starters)", items: [
+                        { name: "जंगली चिकोरी और लाल प्याज के साथ फावा बीन प्यूरी", price: "€10" }, { name: "स्ट्राकियाटेला पनीर, रॉकेट, तोरी, चेरी टमाटर के साथ अल्तामुरा ब्रेड की ब्रुशेटा", price: "€11" },
+                        { name: "क्रंची कैपकोलो और सन-ड्राइड टोमेटो पेस्टो के साथ टैरालो बास्केट में बुर्राटा चीज़", price: "€12" }, { name: "टमाटर सॉस में स्थानीय मीटबॉल और ब्राशियोला", price: "€14" },
+                        { name: "बैंगन और बेसिल मेयो के साथ धीमी आंच पर पका ऑक्टोपस", price: "€15" }, { name: "शहद, जैम, स्लाइस्ड स्थानीय सलामी के साथ स्थानीय चीज़ प्लैटर", price: "€15" }
+                    ]},
+                    { name: "पास्ता", items: [
+                        { name: "जंगली ब्रोकोली, ताजे चेरी टमाटर, एंकोवी, क्रिस्पी ब्रेड के साथ ओरेचिएट", price: "€11" }, { name: "टमाटर सॉस में ब्राशियोला के साथ मारिताती पास्ता", price: "€14" },
+                        { name: "जैतून, आटिचोक मूस, रिकोटा, बादाम के साथ स्ट्रासिनेट पास्ता", price: "€14" }, { name: "काली मिर्च, स्थानीय सॉसेज, पेकोरिनो क्रीम, क्रंबल्ड टैरालो के साथ ग्नोचेट्टी", price: "€15" },
+                        { name: "ऑक्टोपस, पीला डैटेरिनो टमाटर, सन-ड्राइड टमाटर, प्रिमिटिवो सॉस के साथ टैग्लिओलिनो पास्ता", price: "€16" }
+                    ]},
+                    { name: "मुख्य कोर्स", items: [
+                        { name: "ओवन में पके आलू या जंगली चिकोरी के साथ \"ज़ाम्पिना\" सॉसेज", price: "€15" }, { name: "ओवन में पके आलू या जंगली चिकोरी के साथ ग्रिल्ड \"बोम्बेटे\"", price: "€16" },
+                        { name: "\"पोवेरेला\" तोरी के साथ सी बास फ़िललेट", price: "€19" }, { name: "स्थानीय और विशेष मीट का चयन", price: "€/100gr" }
+                    ]},
+                    { name: "साइड डिश", items: [
+                        { name: "बेक किए हुए आलू", price: "€6" }, { name: "भुनी हुई सब्जियां", price: "€6" }, { name: "ग्रैटिन सब्जियां", price: "€6" }, { name: "पिघले हुए कैसिओकावालो चीज़, कैपकोलो, हाउस सॉस के साथ स्मैश किए हुए आलू", price: "€7" }
+                    ]},
+                    { name: "मिठाई", items: [
+                        { name: "क्रंची बादाम, लेमन कर्ड और लाल बेरी के साथ लाइम रिकोटा फोम", price: "€7" }, { name: "सैन मारज़ानो तिरमिसू", price: "€7" },
+                        { name: "लाल बेरी के साथ लेमन पाई", price: "€7" }, { name: "दुल्से डे लेचे के साथ ब्राउनी", price: "€7" }, { name: "कारीगर सेमीफ्रेडो", price: "€7" }
+                    ]},
+                    { name: "ग्लास वाइन", items: [
+                        { name: "स्थानीय सफेद वाइन का ग्लास", desc: "(Verdeca · Malvasia)", price: "€6" }, { name: "स्थानीय रेड वाइन का ग्लास", desc: "(Primitivo · Negramaro · Susumaniello)", price: "€6" },
+                        { name: "Ostuni D.O.C वाइन का ग्लास", desc: "(Ottavianello)", price: "€6" }, { name: "स्थानीय रोज़ वाइन का ग्लास", desc: "(Negramaro)", price: "€6" }, { name: "स्थानीय स्पार्कलिंग वाइन का ग्लास", desc: "(Vermentino)", price: "€6" }
+                    ]},
+                    { name: "बीयर", items: [
+                        { name: "नास्त्रो अज़ुरो बीयर", price: "€4" }, { name: "नास्त्रो अज़ुरो नॉन-अल्कोहलिक", price: "€4.50" }, { name: "गोरा मेनाब्रिया बीयर", price: "€5" },
+                        { name: "लाल मेनाब्रिया बीयर", price: "€6" }, { name: "वीस मेनाब्रिया बीयर", price: "€6" }
+                    ]},
+                    { name: "पेय पदार्थ", items: [
+                        { name: "कोका कोला 33cl", price: "€4" }, { name: "फैंटा 33cl", price: "€4" }, { name: "टॉनिक वाटर", price: "€4" }, { name: "लेमनसोडा", price: "€4" }, { name: "संतरे का रस", price: "€4" }, { name: "पानी", price: "€3" }
+                    ]},
+                    { name: "कॉकटेल", items: [
+                        { name: "स्प्रिट्ज़ (Aperol या Campari)", price: "€8" }, { name: "Hugo", price: "€8" }, { name: "Limoncello Spritz", price: "€8" }, { name: "Espresso Martini", price: "€8" },
+                        { name: "Negroni", price: "€8" }, { name: "Negroni Sbagliato", price: "€8" }, { name: "Americano", price: "€8" },
+                        { name: "जिन टॉनिक", desc: "*Gin: Tanqueray, Gin Mare, Bombay, Hendrick’s & Gin Locale", price: "€8/15" }, { name: "जिन लेमन", desc: "*Gin: Tanqueray, Gin Mare, Bombay, Hendrick’s & Gin Locale", price: "€8/15" },
+                        { name: "वोदका टॉनिक", desc: "*Vodka: Moskovskaya, Belvedere & Grey Goose", price: "€8/12" }, { name: "वोदका लेमन", desc: "*Vodka: Moskovskaya, Belvedere & Grey Goose", price: "€8/12" }, { name: "रम और कोला", price: "€8/12" }
+                    ]}
+                ], info: { cover: "कवर चार्ज €3", allergy: "कृपया कर्मचारियों को किसी भी एलर्जी के बारे में बताएं" }
+            },
+            "zh": {
+                title: "我们的菜单",
+                categories: [
+                    { name: "前菜", items: [
+                        { name: "蚕豆泥配野生菊苣、红洋葱", price: "€10" }, { name: "Altamura 面包普切塔配丝滑奶酪、芝麻菜、西葫芦、樱桃番茄", price: "€11" },
+                        { name: "酥脆卡波科洛肉包裹布拉塔奶酪配晒干番茄酱", price: "€12" }, { name: "本地肉丸和'brasciola'肉卷配番茄酱", price: "€14" },
+                        { name: "慢炖章鱼配茄子和罗勒蛋黄酱", price: "€15" }, { name: "本地奶酪拼盘配蜂蜜、果酱和切片本地萨拉米", price: "€15" }
+                    ]},
+                    { name: "意面", items: [
+                        { name: "猫耳朵意面配野生西兰花、新鲜樱桃番茄、凤尾鱼、脆面包", price: "€11" }, { name: "酱汁肉卷配 Maritati 意面", price: "€14" },
+                        { name: "Strascinate 意面配橄榄、洋蓟慕斯、里科塔奶酪、杏仁", price: "€14" }, { name: "小面疙瘩配甜椒、本地香肠、佩科里诺奶酪酱、碎薄脆饼", price: "€15" },
+                        { name: "章鱼细面配黄番茄、晒干番茄、普里米蒂沃红酒汁", price: "€16" }
+                    ]},
+                    { name: "主菜", items: [
+                        { name: "Zampina 香肠配烤土豆或野生菊苣", price: "€15" }, { name: "炭烤 bombette 肉卷配烤土豆或野生菊苣", price: "€16" },
+                        { name: "海鲈鱼排配 poverella 西葫芦", price: "€19" }, { name: "精选本地红肉", price: "€/100克" }
+                    ]},
+                    { name: "配菜", items: [
+                        { name: "烤土豆", price: "€6" }, { name: "清炒蔬菜", price: "€6" }, { name: "焗烤蔬菜", price: "€6" }, { name: "土豆泥配融化的 caciocavallo 奶酪、capocollo 肉、秘制酱汁", price: "€7" }
+                    ]},
+                    { name: "甜点", items: [
+                        { name: "青柠里科塔奶酪慕斯配脆杏仁、柠檬酱、红浆果", price: "€7" }, { name: "圣马尔扎诺提拉米苏", price: "€7" },
+                        { name: "红浆果柠檬派", price: "€7" }, { name: "焦糖牛奶布朗尼", price: "€7" }, { name: "手工半冷冰淇淋", price: "€7" }
+                    ]},
+                    { name: "杯装葡萄酒", items: [
+                        { name: "一杯本地白葡萄酒", desc: "(Verdeca · Malvasia)", price: "€6" }, { name: "一杯本地红葡萄酒", desc: "(Primitivo · Negramaro · Susumaniello)", price: "€6" },
+                        { name: "一杯 Ostuni D.O.C 葡萄酒", desc: "(Ottavianello)", price: "€6" }, { name: "一杯本地桃红葡萄酒", desc: "(Negramaro)", price: "€6" }, { name: "一杯本地起泡酒", desc: "(Vermentino)", price: "€6" }
+                    ]},
+                    { name: "啤酒", items: [
+                        { name: "Nastro Azzurro 啤酒", price: "€4" }, { name: "Nastro Azzurro 无酒精", price: "€4.50" }, { name: "Menabrea 黄啤", price: "€5" },
+                        { name: "Menabrea 红啤", price: "€6" }, { name: "Menabrea 白啤 (Weiss)", price: "€6" }
+                    ]},
+                    { name: "软饮料", items: [
+                        { name: "可口可乐 33cl", price: "€4" }, { name: "芬达 33cl", price: "€4" }, { name: "汤力水", price: "€4" }, { name: "Lemonsoda", price: "€4" }, { name: "橙汁", price: "€4" }, { name: "水", price: "€3" }
+                    ]},
+                    { name: "鸡尾酒", items: [
+                        { name: "Spritz (Aperol 或 Campari)", price: "€8" }, { name: "Hugo", price: "€8" }, { name: "Limoncello Spritz", price: "€8" }, { name: "Espresso Martini", price: "€8" },
+                        { name: "Negroni", price: "€8" }, { name: "Negroni Sbagliato", price: "€8" }, { name: "Americano", price: "€8" },
+                        { name: "金汤力", desc: "*金酒: Tanqueray, Gin Mare, Bombay, Hendrick’s & 本地金酒", price: "€8/15" }, { name: "金柠檬", desc: "*金酒: Tanqueray, Gin Mare, Bombay, Hendrick’s & 本地金酒", price: "€8/15" },
+                        { name: "伏特加汤力", desc: "*伏特加: Moskovskaya, Belvedere & Grey Goose", price: "€8/12" }, { name: "伏特加柠檬", desc: "*伏特加: Moskovskaya, Belvedere & Grey Goose", price: "€8/12" }, { name: "朗姆可乐", price: "€8/12" }
+                    ]}
+                ], info: { cover: "服务费 €3", allergy: "如果您有任何过敏史，请告知工作人员" }
+            },
+            "ja": {
+                title: "メニュー",
+                categories: [
+                    { name: "前菜", items: [
+                        { name: "そら豆のピューレ 野生のチコリと赤玉ねぎ添え", price: "€10" }, { name: "アルタムーラパンのブルスケッタ ストラッチャテッラチーズ、ルッコラ、ズッキーニ、チェリートマト", price: "€11" },
+                        { name: "タラッロの器に入ったブッラータチーズ カリカリのカポコッロ、ドライトマトのペスト", price: "€12" }, { name: "地元産肉のミートボールとブラショーラ（肉巻き） トマトソース", price: "€14" },
+                        { name: "じっくり煮込んだタコ ナスとバジルマヨネーズ添え", price: "€15" }, { name: "地元産チーズの盛り合わせ ハチミツ、ジャム、地元産サラミ", price: "€15" }
+                    ]},
+                    { name: "パスタ", items: [
+                        { name: "野生のブロッコリー、フレッシュチェリートマト、アンチョビ、カリカリパンのオレキエッテ", price: "€11" }, { name: "ブラショーラ入りトマトソースのマリターティ・パスタ", price: "€14" },
+                        { name: "オリーブ、アーティチョークのムース、リコッタ、アーモンドのストラシナテ・パスタ", price: "€14" }, { name: "ピーマン、地元産ソーセージ、ペコリーノクリーム、砕いたタラッロのニョッケッティ", price: "€15" },
+                        { name: "タコ、黄色いダッテリーノトマト、ドライトマト、プリミティーヴォソースのタリオリーノ", price: "€16" }
+                    ]},
+                    { name: "メイン", items: [
+                        { name: "「ザンピーナ」ソーセージ ローストポテトまたは野生のチコリ添え", price: "€15" }, { name: "「ボンベッテ」のグリル ローストポテトまたは野生のチコリ添え", price: "€16" },
+                        { name: "スズキのフィレ 「ポヴェレッラ」ズッキーニ添え", price: "€19" }, { name: "地元産・特選赤身肉の盛り合わせ", price: "€/100g" }
+                    ]},
+                    { name: "付け合わせ", items: [
+                        { name: "ローストポテト", price: "€6" }, { name: "野菜のソテー", price: "€6" }, { name: "野菜のグラタン", price: "€6" }, { name: "マッシュポテト 溶けたカチョカヴァッロチーズ、カポコッロ、特製ソース", price: "€7" }
+                    ]},
+                    { name: "デザート", items: [
+                        { name: "ライムとリコッタのムース カリカリアーモンド、レモンカード、赤い果実", price: "€7" }, { name: "サンマルツァーノ風ティラミス", price: "€7" },
+                        { name: "赤い果実のレモンパイ", price: "€7" }, { name: "ドゥルセ・デ・レチェのブラウニー", price: "€7" }, { name: "自家製セミフレッド", price: "€7" }
+                    ]},
+                    { name: "グラスワイン", items: [
+                        { name: "地元産白ワイン グラス", desc: "(Verdeca · Malvasia)", price: "€6" }, { name: "地元産赤ワイン グラス", desc: "(Primitivo · Negramaro · Susumaniello)", price: "€6" },
+                        { name: "オストゥーニ D.O.C ワイン グラス", desc: "(Ottavianello)", price: "€6" }, { name: "地元産ロゼワイン グラス", desc: "(Negramaro)", price: "€6" }, { name: "地元産スパークリング グラス", desc: "(Vermentino)", price: "€6" }
+                    ]},
+                    { name: "ビール", items: [
+                        { name: "ナストロ・アズーロ ビール", price: "€4" }, { name: "ナストロ・アズーロ ノンアルコール", price: "€4.50" }, { name: "メナブレア ブロンドビール", price: "€5" },
+                        { name: "メナブレア レッドビール", price: "€6" }, { name: "メナブレア ヴァイスビール", price: "€6" }
+                    ]},
+                    { name: "ソフトドリンク", items: [
+                        { name: "コカ・コーラ 33cl", price: "€4" }, { name: "ファンタ 33cl", price: "€4" }, { name: "トニックウォーター", price: "€4" }, { name: "レモンソーダ", price: "€4" }, { name: "オレンジジュース", price: "€4" }, { name: "水", price: "€3" }
+                    ]},
+                    { name: "カクテル", items: [
+                        { name: "スプリッツ (Aperol または Campari)", price: "€8" }, { name: "ウーゴ (Hugo)", price: "€8" }, { name: "リモンチェッロ スプリッツ", price: "€8" }, { name: "エスプレッソ マティーニ", price: "€8" },
+                        { name: "ネグローニ", price: "€8" }, { name: "ネグローニ ズバリアート", price: "€8" }, { name: "アメリカーノ", price: "€8" },
+                        { name: "ジントニック", desc: "*ジン: Tanqueray, Gin Mare, Bombay, Hendrick’s & 地元産ジン", price: "€8/15" }, { name: "ジンレモン", desc: "*ジン: Tanqueray, Gin Mare, Bombay, Hendrick’s & 地元産ジン", price: "€8/15" },
+                        { name: "ウォッカトニック", desc: "*ウォッカ: Moskovskaya, Belvedere & Grey Goose", price: "€8/12" }, { name: "ウォッカリモン", desc: "*ウォッカ: Moskovskaya, Belvedere & Grey Goose", price: "€8/12" }, { name: "ラム＆コーラ", price: "€8/12" }
+                    ]}
+                ], info: { cover: "カバーチャージ €3", allergy: "アレルギー等ございましたらスタッフにお申し付けください" }
+            },
+            "ko": {
+                title: "메뉴",
+                categories: [
+                    { name: "에피타이저", items: [
+                        { name: "야생 치커리와 적양파를 곁들인 파바빈 퓌레", price: "€10" }, { name: "스트라치아텔라 치즈, 루꼴라, 주키니, 체리 토마토를 얹은 알타무라 빵 브루스케타", price: "€11" },
+                        { name: "바삭한 카포콜로 햄과 썬드라이 토마토 페스토를 곁들인 타랄로 바구니 속 부라타 치즈", price: "€12" }, { name: "현지 미트볼과 토마토 소스의 브라시올라", price: "€14" },
+                        { name: "가지와 바질 마요네즈를 곁들여 천천히 익힌 문어", price: "€15" }, { name: "꿀, 잼, 얇게 썬 현지 살라미를 곁들인 현지 치즈 플래터", price: "€15" }
+                    ]},
+                    { name: "파스타", items: [
+                        { name: "야생 브로콜리, 신선한 체리 토마토, 엔초비, 바삭한 빵을 곁들인 오레키에테", price: "€11" }, { name: "토마토 소스에 브라시올라를 넣은 마리타티 파스타", price: "€14" },
+                        { name: "올리브, 아티초크 무스, 리코타, 아몬드를 곁들인 스트라시나테 파스타", price: "€14" }, { name: "피망, 현지 소시지, 페코리노 크림, 부순 타랄로 과자를 곁들인 뇨케티", price: "€15" },
+                        { name: "문어, 노란 다테리노 토마토, 썬드라이 토마토, 프리미티보 소스를 곁들인 탈리올리노 파스타", price: "€16" }
+                    ]},
+                    { name: "메인 요리", items: [
+                        { name: "오븐 구이 감자 또는 야생 치커리를 곁들인 \"잠피나\" 소시지", price: "€15" }, { name: "오븐 구이 감자 또는 야생 치커리를 곁들인 그릴에 구운 \"봄베테\"", price: "€16" },
+                        { name: "\"포베렐라\" 주키니를 곁들인 농어 필레", price: "€19" }, { name: "현지 및 특선 붉은 고기 셀렉션", price: "€/100gr" }
+                    ]},
+                    { name: "사이드 메뉴", items: [
+                        { name: "오븐 구이 감자", price: "€6" }, { name: "볶은 채소", price: "€6" }, { name: "그라탕 채소", price: "€6" }, { name: "녹인 카치오카발로 치즈, 카포콜로, 하우스 소스를 얹은 으깬 감자", price: "€7" }
+                    ]},
+                    { name: "디저트", items: [
+                        { name: "바삭한 아몬드, 레몬 커드, 붉은 과일을 곁들인 라임 리코타 무스", price: "€7" }, { name: "산 마르자노 티라미수", price: "€7" },
+                        { name: "붉은 과일 레몬 파이", price: "€7" }, { name: "둘세 데 레체 브라우니", price: "€7" }, { name: "수제 세미프레도", price: "€7" }
+                    ]},
+                    { name: "잔 와인", items: [
+                        { name: "현지 화이트 와인 1잔", desc: "(Verdeca · Malvasia)", price: "€6" }, { name: "현지 레드 와인 1잔", desc: "(Primitivo · Negramaro · Susumaniello)", price: "€6" },
+                        { name: "오스투니 D.O.C 와인 1잔", desc: "(Ottavianello)", price: "€6" }, { name: "현지 로제 와인 1잔", desc: "(Negramaro)", price: "€6" }, { name: "현지 스파클링 와인 1잔", desc: "(Vermentino)", price: "€6" }
+                    ]},
+                    { name: "맥주", items: [
+                        { name: "나스트로 아즈로 맥주", price: "€4" }, { name: "나스트로 아즈로 무알콜", price: "€4.50" }, { name: "메나브레아 블론드 맥주", price: "€5" },
+                        { name: "메나브레아 레드 맥주", price: "€6" }, { name: "메나브레아 바이스 맥주", price: "€6" }
+                    ]},
+                    { name: "음료", items: [
+                        { name: "코카콜라 33cl", price: "€4" }, { name: "환타 33cl", price: "€4" }, { name: "토닉 워터", price: "€4" }, { name: "레몬소다", price: "€4" }, { name: "오렌지 주스", price: "€4" }, { name: "물", price: "€3" }
+                    ]},
+                    { name: "칵테일", items: [
+                        { name: "스프리츠 (Aperol 또는 Campari)", price: "€8" }, { name: "휴고", price: "€8" }, { name: "리몬첼로 스프리츠", price: "€8" }, { name: "에스프레소 마티니", price: "€8" },
+                        { name: "네그로니", price: "€8" }, { name: "네그로니 스발리아토", price: "€8" }, { name: "아메리카노", price: "€8" },
+                        { name: "진 토닉", desc: "*진: Tanqueray, Gin Mare, Bombay, Hendrick’s & 현지 진", price: "€8/15" }, { name: "진 레몬", desc: "*진: Tanqueray, Gin Mare, Bombay, Hendrick’s & 현지 진", price: "€8/15" },
+                        { name: "보드카 토닉", desc: "*보드카: Moskovskaya, Belvedere & Grey Goose", price: "€8/12" }, { name: "보드카 레몬", desc: "*보드카: Moskovskaya, Belvedere & Grey Goose", price: "€8/12" }, { name: "럼 & 콜라", price: "€8/12" }
+                    ]}
+                ], info: { cover: "커버 차지 €3", allergy: "알레르기가 있으신 분은 직원에게 미리 말씀해 주십시오" }
+            },
+            "he": {
+                title: "התפריט שלנו",
+                categories: [
+                    { name: "מנות ראשונות", items: [
+                        { name: "פירה פול מוגש עם עולש בר ובצל אדום", price: "€10" }, { name: "ברוסקטה מלחם אלטמורה עם גבינת סטרצ'טלה, רוקולה, זוקיני, עגבניות שרי", price: "€11" },
+                        { name: "גבינת בוראטה בסלסלת טראלו עם קפוקולו פריך ופסטו עגבניות מיובשות", price: "€12" }, { name: "כדורי בשר מקומיים ובראשולה ברוטב עגבניות", price: "€14" },
+                        { name: "תמנון בבישול אטי עם חצילים ומיונז בזיליקום", price: "€15" }, { name: "פלטת גבינות מקומיות עם דבש, ריבות ונקניקי סלמי מקומיים", price: "€15" }
+                    ]},
+                    { name: "פסטות", items: [
+                        { name: "אורקייטה עם ברוקולי בר, עגבניות שרי טריות, אנשובי ולחם פריך", price: "€11" }, { name: "פסטה מריטאטי עם בראשולה ברוטב עגבניות", price: "€14" },
+                        { name: "פסטה סטרשינאטה עם זיתים, מוס ארטישוק, ריקוטה ושקדים", price: "€14" }, { name: "ניוקטי עם פלפלים, נקניקייה מקומית, קרם פקורינו ופירורי טראלו", price: "€15" },
+                        { name: "טליולינו עם תמנון, עגבניות דטרינו צהובות, עגבניות מיובשות ורוטב פרימיטיבו", price: "€16" }
+                    ]},
+                    { name: "עיקריות", items: [
+                        { name: "נקניקיית זמפינה עם תפוחי אדמה אפויים או עולש בר", price: "€15" }, { name: "גלילי בשר 'בומבטה' על הגריל עם תפוחי אדמה אפויים או עולש בר", price: "€16" },
+                        { name: "פילה ברמונדי עם זוקיני 'פוורלה'", price: "€19" }, { name: "מבחר בשרים אדומים מקומיים ומיוחדים", price: "€/100 גרם" }
+                    ]},
+                    { name: "תוספות", items: [
+                        { name: "תפוחי אדמה אפויים", price: "€6" }, { name: "ירקות מוקפצים", price: "€6" }, { name: "ירקות מוקרמים", price: "€6" }, { name: "פירה תפוחי אדמה עם גבינת קצ'וקוואלו מותכת, קפוקולו, רוטב הבית", price: "€7" }
+                    ]},
+                    { name: "קינוחים", items: [
+                        { name: "קצף ריקוטה ליים עם שקדים פריכים, קרם לימון ופירות יער", price: "€7" }, { name: "טירמיסו סן מרזאנו", price: "€7" },
+                        { name: "פאי לימון עם פירות יער", price: "€7" }, { name: "בראוניז עם ריבת חלב", price: "€7" }, { name: "סמיפרדו ארטיזנלי", price: "€7" }
+                    ]},
+                    { name: "יינות בכוס", items: [
+                        { name: "כוס יין לבן מקומי", desc: "(Verdeca · Malvasia)", price: "€6" }, { name: "כוס יין אדום מקומי", desc: "(Primitivo · Negramaro · Susumaniello)", price: "€6" },
+                        { name: "כוס יין Ostuni D.O.C", desc: "(Ottavianello)", price: "€6" }, { name: "כוס יין רוזה מקומי", desc: "(Negramaro)", price: "€6" }, { name: "כוס יין מבעבע מקומי", desc: "(Vermentino)", price: "€6" }
+                    ]},
+                    { name: "בירות", items: [
+                        { name: "בירה Nastro Azzurro", price: "€4" }, { name: "בירה Nastro Azzurro ללא אלכוהול", price: "€4.50" }, { name: "בירה Menabrea בהירה", price: "€5" },
+                        { name: "בירה Menabrea אדומה", price: "€6" }, { name: "בירה Menabrea חיטה", price: "€6" }
+                    ]},
+                    { name: "משקאות", items: [
+                        { name: "קוקה קולה 330 מ\"ל", price: "€4" }, { name: "פנטה 330 מ\"ל", price: "€4" }, { name: "מי טוניק", price: "€4" }, { name: "לימונסודה", price: "€4" }, { name: "מיץ תפוזים", price: "€4" }, { name: "מים", price: "€3" }
+                    ]},
+                    { name: "קוקטיילים", items: [
+                        { name: "שפריץ (אפרול או קמפרי)", price: "€8" }, { name: "הוגו", price: "€8" }, { name: "לימונצ'לו שפריץ", price: "€8" }, { name: "אספרסו מרטיני", price: "€8" },
+                        { name: "נגרוני", price: "€8" }, { name: "נגרוני סבליאטו", price: "€8" }, { name: "אמריקנו", price: "€8" },
+                        { name: "ג'ין טוניק", desc: "*ג'ין: Tanqueray, Gin Mare, Bombay, Hendrick’s & ג'ין מקומי", price: "€8/15" }, { name: "ג'ין לימון", desc: "*ג'ין: Tanqueray, Gin Mare, Bombay, Hendrick’s & ג'ין מקומי", price: "€8/15" },
+                        { name: "וודקה טוניק", desc: "*וודקה: Moskovskaya, Belvedere & Grey Goose", price: "€8/12" }, { name: "וודקה לימון", desc: "*וודקה: Moskovskaya, Belvedere & Grey Goose", price: "€8/12" }, { name: "רום וקולה", price: "€8/12" }
+                    ]}
+                ], info: { cover: "דמי שירות €3", allergy: "נא לעדכן את הצוות על כל אלרגיה" }
+            },
+            "fa": {
+                title: "منوی ما",
+                categories: [
+                    { name: "پیش‌غذا", items: [
+                        { name: "پوره باقلا همراه با کاسنی وحشی و پیاز قرمز", price: "€10" }, { name: "بروسکتا نان آلتامورا با پنیر استراچاتلا، روکولا، کدو سبز، گوجه گیلاسی", price: "€11" },
+                        { name: "پنیر بوراتا در سبد تارالو با کاپوکولو ترد، پستو گوجه خشک", price: "€12" }, { name: "کوفته‌های محلی و براشیولا در سس گوجه‌فرنگی", price: "€14" },
+                        { name: "هشت‌پا پخته شده با حرارت ملایم، بادمجان، مایونز ریحان", price: "€15" }, { name: "سینی پنیر محلی با عسل، مربا، ورقه‌های سالامی محلی", price: "€15" }
+                    ]},
+                    { name: "پاستا", items: [
+                        { name: "پاستا اورکیته با بروکلی وحشی، گوجه گیلاسی تازه، آنچوی، نان ترد", price: "€11" }, { name: "پاستا ماریتاتی با براشیولا در سس گوجه‌فرنگی", price: "€14" },
+                        { name: "پاستا استراشیناته با زیتون، موس کنگر فرنگی، ریکوتا، بادام", price: "€14" }, { name: "نیوکی با فلفل دلمه‌ای، سوسیس محلی، خامه پنیر پکورینو، خرده‌های تارالو", price: "€15" },
+                        { name: "پاستا تالیولینو با هشت‌پا، گوجه داترینو زرد، گوجه خشک، سس پریمیتیوو", price: "€16" }
+                    ]},
+                    { name: "غذای اصلی", items: [
+                        { name: "سوسیس \"زامپینا\" با سیب‌زمینی تنوری یا کاسنی وحشی", price: "€15" }, { name: "رول گوشت کبابی \"بومبته\" با سیب‌زمینی تنوری یا کاسنی وحشی", price: "€16" },
+                        { name: "فیله ماهی سی‌باس با کدو سبز \"پوورلا\"", price: "€19" }, { name: "مجموعه‌ای از گوشت‌های قرمز محلی", price: "€/۱۰۰ گرم" }
+                    ]},
+                    { name: "مخلفات", items: [
+                        { name: "سیب‌زمینی تنوری", price: "€6" }, { name: "سبزیجات تفت داده شده", price: "€6" }, { name: "سبزیجات گراتن", price: "€6" }, { name: "سیب‌زمینی له شده با پنیر کاچوکاوالو ذوب شده، کاپوکولو، سس مخصوص", price: "€7" }
+                    ]},
+                    { name: "دسرها", items: [
+                        { name: "فوم ریکوتا و لیموترش با بادام ترد، کرم لیمو و میوه‌های قرمز", price: "€7" }, { name: "تیرامیسو سن مارزانو", price: "€7" },
+                        { name: "پای لیمو با میوه‌های قرمز", price: "€7" }, { name: "براونی با دولسه ده لچه", price: "€7" }, { name: "سمی‌فردو دست‌ساز", price: "€7" }
+                    ]},
+                    { name: "شراب فنجانی", items: [
+                        { name: "یک لیوان شراب سفید محلی", desc: "(Verdeca · Malvasia)", price: "€6" }, { name: "یک لیوان شراب قرمز محلی", desc: "(Primitivo · Negramaro · Susumaniello)", price: "€6" },
+                        { name: "یک لیوان شراب Ostuni D.O.C", desc: "(Ottavianello)", price: "€6" }, { name: "یک لیوان شراب رزه محلی", desc: "(Negramaro)", price: "€6" }, { name: "یک لیوان شراب گازدار محلی", desc: "(Vermentino)", price: "€6" }
+                    ]},
+                    { name: "آبجو", items: [
+                        { name: "آبجو Nastro Azzurro", price: "€4" }, { name: "آبجو بدون الکل Nastro Azzurro", price: "€4.50" }, { name: "آبجو بلوند Menabrea", price: "€5" },
+                        { name: "آبجو قرمز Menabrea", price: "€6" }, { name: "آبجو گندم Menabrea", price: "€6" }
+                    ]},
+                    { name: "نوشیدنی‌ها", items: [
+                        { name: "کوکا کولا ۳۳cl", price: "€4" }, { name: "فانتا ۳۳cl", price: "€4" }, { name: "آب تونیک", price: "€4" }, { name: "لیمون‌سودا", price: "€4" }, { name: "آب پرتقال", price: "€4" }, { name: "آب", price: "€3" }
+                    ]},
+                    { name: "کوکتل‌ها", items: [
+                        { name: "اسپریتز (Aperol یا Campari)", price: "€8" }, { name: "هوگو", price: "€8" }, { name: "لیمونچلو اسپریتز", price: "€8" }, { name: "اسپرسو مارتینی", price: "€8" },
+                        { name: "نگرونی", price: "€8" }, { name: "نگرونی اسبگلیاتو", price: "€8" }, { name: "آمریکانو", price: "€8" },
+                        { name: "جین تونیک", desc: "*جین: Tanqueray, Gin Mare, Bombay, Hendrick’s & جین محلی", price: "€8/15" }, { name: "جین لیمو", desc: "*جین: Tanqueray, Gin Mare, Bombay, Hendrick’s & جین محلی", price: "€8/15" },
+                        { name: "ودکا تونیک", desc: "*ودکا: Moskovskaya, Belvedere & Grey Goose", price: "€8/12" }, { name: "ودکا لیمو", desc: "*ودکا: Moskovskaya, Belvedere & Grey Goose", price: "€8/12" }, { name: "رام و کولا", price: "€8/12" }
+                    ]}
+                ], info: { cover: "حق سرویس €3", allergy: "لطفا در صورت داشتن آلرژی به پرسنل اطلاع دهید" }
             }
         };
-
-        // Cloniamo la lingua inglese per le altre lingue del selettore
-        const langsToClone = ['es-AR','es-CL','nl','pt','pt-BR','fi','ru','hi','zh','ja','ko','he','fa'];
-        langsToClone.forEach(l => {
-            menuData[l] = JSON.parse(JSON.stringify(menuData['en'])); 
-            if(l==='he') menuData[l].title = "התפריט שלנו (English)";
-            if(l==='fa') menuData[l].title = "منوی ما (English)";
-        });
 
         function renderMenu(lang) {
             const data = menuData[lang] || menuData['en']; 
             
-            // Aggiorna titolo della scheda e sottotitolo principale
             document.title = "Casa San Giacomo - " + data.title;
             document.getElementById('main-subtitle').textContent = data.title;
             
@@ -683,7 +933,20 @@
             container.innerHTML = '';
             footerContainer.innerHTML = '';
 
-            data.categories.forEach((category, index) => {
+            // 1. Clona le categorie del cibo/bevande dalla lingua corrente
+            let allCategories = JSON.parse(JSON.stringify(data.categories));
+
+            // 2. Aggiungi la Carta dei Vini (con i titoli tradotti)
+            const wineTrans = wineCategories[lang] || wineCategories['en'];
+            wineListDatabase.forEach(wineCategory => {
+                allCategories.push({
+                    name: wineTrans[wineCategory.id], // Traduce dinamicamente (es. "Vini Rossi")
+                    items: wineCategory.items // Mantiene i vini invariati
+                });
+            });
+
+            // 3. Renderizza tutto (Cibo + Vini)
+            allCategories.forEach((category, index) => {
                 const categoryDiv = document.createElement('div');
                 categoryDiv.className = 'category';
                 categoryDiv.style.animationDelay = `${index * 0.15}s`; 
@@ -730,6 +993,7 @@
                 container.appendChild(categoryDiv);
             });
 
+            // Footer
             if(data.info) {
                 const footerHTML = `
                     <div class="menu-footer">
@@ -743,6 +1007,7 @@
                 footerContainer.innerHTML = footerHTML;
             }
 
+            // Gestione RTL
             const isRTL = lang === 'he' || lang === 'fa';
             document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
             document.documentElement.lang = lang;
@@ -772,3 +1037,4 @@
     </script>
 </body>
 </html>
+```
