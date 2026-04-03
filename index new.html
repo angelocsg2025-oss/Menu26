@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="it" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Casa San Giacomo - Menù</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,600&family=Source+Sans+Pro:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        :root { --bg-color: #fcfbf9; --text-main: #2c2c2c; --text-muted: #666; --accent-color: #cda873; --border-color: #eaeaea; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Source Sans Pro', sans-serif; background-color: var(--bg-color); color: var(--text-main); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+        header { background-color: #fff; padding: 10px 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; }
+        .logo-container { display: flex; align-items: center; gap: 10px; font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 600; color: var(--accent-color); text-decoration: none; }
+        .logo-img { max-height: 40px; width: auto; object-fit: contain; }
+        .lang-selector-wrapper { position: relative; }
+        select#lang-select { appearance: none; -webkit-appearance: none; background-color: #fff; border: 1px solid var(--border-color); padding: 8px 35px 8px 15px; border-radius: 25px; font-family: inherit; font-size: 0.95rem; color: var(--text-main); cursor: pointer; outline: none; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
+        .lang-selector-wrapper::after { content: "▼"; font-size: 0.7rem; color: var(--accent-color); position: absolute; right: 15px; top: 50%; transform: translateY(-50%); pointer-events: none; }
+        main { max-width: 800px; margin: 40px auto; padding: 0 20px; }
+        .title-section { text-align: center; margin-bottom: 60px; }
+        h1.restaurant-name { font-family: 'Playfair Display', serif; font-size: 3.5rem; color: var(--text-main); margin-bottom: 5px; font-weight: 600; letter-spacing: 1px; }
+        h2.menu-subtitle { font-family: 'Source Sans Pro', sans-serif; font-size: 1.1rem; color: var(--accent-color); text-transform: uppercase; letter-spacing: 4px; font-weight: 400; }
+        h2.menu-subtitle::after { content: ''; display: block; width: 40px; height: 2px; background-color: var(--accent-color); margin: 15px auto 0; }
+        .category { margin-bottom: 50px; opacity: 0; transform: translateY(20px); animation: fadeIn 0.6s ease forwards; }
+        .category-title { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--accent-color); border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 25px; text-transform: uppercase; letter-spacing: 2px; }
+        .menu-item { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 15px; position: relative; }
+        .item-details { display: flex; flex-grow: 1; align-items: baseline; position: relative; }
+        .item-details::after { content: ''; flex-grow: 1; border-bottom: 1px dotted #ccc; margin: 0 15px; position: relative; top: -4px; }
+        .item-name { font-weight: 600; font-size: 1.1rem; max-width: 85%; background-color: var(--bg-color); padding-right: 5px; }
+        .item-desc { display: block; font-size: 0.9rem; color: var(--text-muted); font-style: italic; margin-top: -3px; margin-bottom: 15px; }
+        .item-price { font-weight: 600; font-size: 1.1rem; white-space: nowrap; background-color: var(--bg-color); padding-left: 5px; color: var(--accent-color); }
+        .menu-footer { margin-top: 60px; padding-top: 20px; border-top: 1px solid var(--border-color); text-align: center; font-size: 0.95rem; color: var(--text-muted); opacity: 0; animation: fadeIn 1s ease 1s forwards; }
+        .wifi-box { margin-top: 15px; padding: 10px; background-color: #fff; border: 1px dashed #ccc; display: inline-block; border-radius: 5px;}
+        .wifi-box strong { color: var(--accent-color); }
+        html[dir="rtl"] .item-name { padding-right: 0; padding-left: 5px; }
+        html[dir="rtl"] .item-price { padding-left: 0; padding-right: 5px; }
+        html[dir="rtl"] .lang-selector-wrapper::after { right: auto; left: 15px; }
+        html[dir="rtl"] select#lang-select { padding: 8px 15px 8px 35px; }
+        @keyframes fadeIn { to { opacity: 1; transform: translateY(0); } }
+        @media (max-width: 600px) { h1.restaurant-name { font-size: 2.5rem; } h2.menu-subtitle { font-size: 0.9rem; letter-spacing: 2px; } .category-title { font-size: 1.5rem; } .item-name { font-size: 1rem; max-width: 75%; } .item-price { font-size: 1rem; } .logo-container span { display: none; } }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-container">
+            <img src="tuo-logo.png" alt="Logo" class="logo-img" onerror="this.style.display='none'">
+            <span>Casa San Giacomo</span>
+        </div>
+        <div class="lang-selector-wrapper">
+            <select id="lang-select">
+                <option value="it">🇮🇹 Italiano</option><option value="en">🇬🇧 English</option><option value="es">🇪🇸 Español</option>
+                <option value="es-AR">🇦🇷 Español (AR)</option><option value="es-CL">🇨🇱 Español (CL)</option><option value="fr">🇫🇷 Français</option>
+                <option value="de">🇩🇪 Deutsch</option><option value="nl">🇳🇱 Nederlands</option><option value="pt">🇵🇹 Português (PT)</option>
+                <option value="pt-BR">🇧🇷 Português (BR)</option><option value="fi">🇫🇮 Suomi</option><option value="ru">🇷🇺 Русский</option>
+                <option value="hi">🇮🇳 हिन्दी</option><option value="zh">🇨🇳 中文</option><option value="ja">🇯🇵 日本語</option>
+                <option value="ko">🇰🇷 한국어</option><option value="he">🇮🇱 עברית</option><option value="fa">🇮🇷 فارسی</option>
+            </select>
+        </div>
+    </header>
+
+    <main>
+        <div class="title-section">
+            <h1 class="restaurant-name">Casa San Giacomo</h1>
+            <h2 class="menu-subtitle" id="main-subtitle">Il Nostro Menù</h2>
+        </div>
+        <div id="menu-container"></div>
+        <div id="footer-container"></div>
+    </main>
+
+    <script>
+        // --- DATABASE VINI (Mantenuto) ---
+        const wineListDatabase = [
+            { id: "reds", items: [
+                { name: "Marmorelle “Tenute Rubino”", desc: "Negramaro", price: "€19" }, { name: "Marmorelle “Tenute Rubino”", desc: "Primitivo", price: "€19" },
+                { name: "Lamo “Tenute Rubino”", desc: "Ottavianello", price: "€21" }, { name: "Passamante “Masseria Li Veli”", desc: "Salice Salentino", price: "€21" },
+                { name: "Roccamora “Schola Sarmenti”", desc: "Negramaro", price: "€22" }, { name: "Lirica “Produttori di Manduria”", desc: "Primitivo", price: "€22" },
+                { name: "Trentangeli BIO “Tormaresca”", desc: "Aglianico", price: "€25" }, { name: "Oltre me “Tenute Rubino”", desc: "Susumaniello", price: "€26" },
+                { name: "Vigna Pedale “Torre Vento”", desc: "Nero di Troia", price: "€26" }, { name: "Parco Marano BIO “G. Ceci”", desc: "Nero di Troia", price: "€26" },
+                { name: "Nerio “Schola Sarmenti”", desc: "Negramaro · Malvasia", price: "€27" }, { name: "Askos “Masseria Li Veli”", desc: "Malsavia Nera", price: "€28" },
+                { name: "Salice Salentino “Cosimo Taurino”", desc: "Negramaro · Malvasia", price: "€28" }, { name: "Palombara “Tenute Rubino”", desc: "Primitivo", price: "€30" },
+                { name: "“Muro Sant’Angelo Chiaromonte”", desc: "Primitivo", price: "€32" }, { name: "Nauna “Schola Sarmenti”", desc: "Primitivo · Negramaro", price: "€35" },
+                { name: "Antieri “Schola Sarmenti”", desc: "Susumaniello", price: "€35" }, { name: "Niuru Maru BIO “Archetipo”", desc: "Negramaro", price: "€35" },
+                { name: "Teresamanara “Cantele”", desc: "Negramaro", price: "€35" }, { name: "Notarpanaro “Cosimo Taurino”", desc: "Negramaro", price: "€38" },
+                { name: "F “San Marzano”", desc: "Negramaro", price: "€40" }, { name: "50 anni “San Marzano”", desc: "Primitivo", price: "€40" },
+                { name: "Visellio “Tenute Rubino”", desc: "Primitivo", price: "€45" }, { name: "Felice BIO “G. Ceci” Riserva", desc: "Nero di Troia", price: "€45" },
+                { name: "Sessant’anni “San Marzano”", desc: "Primitivo", price: "€45" }, { name: "Diciotto “Schola Sarmenti”", desc: "Primitivo", price: "€55" },
+                { name: "Collezione Privata “Varvaglione”", desc: "Negramaro", price: "€55" }, { name: "Donnalisa “Leone De Catris”", desc: "Salice Salentino", price: "€55" },
+                { name: "62 “San Marzano”", desc: "Primitivo", price: "€55" }, { name: "Mondo Nuovo “Morella”", desc: "Primitivo", price: "€56" },
+                { name: "“Barbatto Chiaromonte Riserva”", desc: "Primitivo", price: "€60" }, { name: "“Attanasio”", desc: "Primitivo di Manduria", price: "€60" },
+                { name: "Torre Testa “Tenute Rubino” 2017", desc: "Susumaniello", price: "€75" }, { name: "Le Braci “Garofano”", desc: "Negramaro", price: "€80" },
+                { name: "Graticciaia “Vallone”", desc: "Negramaro", price: "€85" }, { name: "Patriglione “Cosimo Taurino”", desc: "Negramaro", price: "€85" },
+                { name: "Patriglione “Cosimo Taurino” 2007", desc: "Negramaro", price: "€120" }
+            ]},
+            { id: "whites", items: [
+                { name: "Marmorelle, “Tenute Rubino”", desc: "Malvasia", price: "€23" }, { name: "Lamiro, “Tenute Rubino”", desc: "Verdeca", price: "€24" },
+                { name: "Edda “San Marzano”", desc: "Chardonnay", price: "€28" }, { name: "Panascio BIO “Giancarlo Ceci”", desc: "Bombino Bianco", price: "€28" },
+                { name: "Terasa Manara, “Cantele” Riserva", desc: "Chardonnay", price: "€40" }
+            ]},
+            { id: "roses", items: [
+                { name: "Marmorelle, “Tenute Rubino”", desc: "Negramaro · Susumaniello", price: "€23" }, { name: "Tramari, “San Marzano”", desc: "Primitivo", price: "€25" },
+                { name: "Kimia “Chiaromonte”", desc: "Pinot Nero", price: "€28" }, { name: "60 Anni Rosè “San Marzano”", desc: "Primitivo", price: "€40" },
+                { name: "“Attanasio”", desc: "Primitivo di Manduria", price: "€40" }
+            ]},
+            { id: "sparkling", items: [
+                { name: "Libens “Tenute Rubino”", desc: "Vermentino", price: "€28" }, { name: "Pas Dosè “D’araprì”", desc: "Bombino bianco · Pinot nero", price: "€45" },
+                { name: "Ancestrale Brut “Chiaromonte”", desc: "Chardonnay", price: "€50" }, { name: "Sumare Rose “Tenute Rubino”", desc: "Susumaniello", price: "€55" },
+                { name: "La Scala “Bellavista”", desc: "Chardonnay · Pinot nero", price: "€60" }, { name: "Bollinger Champagne", desc: "Champagne", price: "€95" },
+                { name: "Pierre Belle Epoque", desc: "Champagne", price: "€250" }
+            ]}
+        ];
+
+        const wineCategories = {
+            "it": { reds: "Vini Rossi", whites: "Vini Bianchi", roses: "Vini Rosati", sparkling: "Bollicine" },
+            "en": { reds: "Red Wines", whites: "White Wines", roses: "Rosé Wines", sparkling: "Sparkling Wines" },
+            "es": { reds: "Vinos Tintos", whites: "Vinos Blancos", roses: "Vinos Rosados", sparkling: "Espumosos" },
+            "es-AR": { reds: "Vinos Tintos", whites: "Vinos Blancos", roses: "Vinos Rosados", sparkling: "Espumantes" },
+            "es-CL": { reds: "Vinos Tintos", whites: "Vinos Blancos", roses: "Vinos Rosados", sparkling: "Espumantes" },
+            "fr": { reds: "Vins Rouges", whites: "Vins Blancs", roses: "Vins Rosés", sparkling: "Bulles & Champagnes" },
+            "de": { reds: "Rotweine", whites: "Weißweine", roses: "Roséweine", sparkling: "Schaumweine" },
+            "nl": { reds: "Rode Wijnen", whites: "Witte Wijnen", roses: "Rosé Wijnen", sparkling: "Mousserende Wijnen" },
+            "pt": { reds: "Vinhos Tintos", whites: "Vinhos Brancos", roses: "Vinhos Rosés", sparkling: "Espumantes" },
+            "pt-BR": { reds: "Vinhos Tintos", whites: "Vinhos Brancos", roses: "Vinhos Rosés", sparkling: "Espumantes" },
+            "fi": { reds: "Punaviinit", whites: "Valkoviinit", roses: "Roseeviinit", sparkling: "Kuohuviinit" },
+            "ru": { reds: "Красные вина", whites: "Белые вина", roses: "Розовые вина", sparkling: "Игристые вина" },
+            "hi": { reds: "रेड वाइन", whites: "व्हाइट वाइन", roses: "रोज़ वाइन", sparkling: "स्पार्कल링 वाइन" },
+            "zh": { reds: "红葡萄酒", whites: "白葡萄酒", roses: "桃红葡萄酒", sparkling: "起泡酒" },
+            "ja": { reds: "赤ワイン", whites: "白ワイン", roses: "ロゼワイン", sparkling: "スパークリングワイン" },
+            "ko": { reds: "레드 와인", whites: "화이트 와인", roses: "로제 와인", sparkling: "스파클링 와인" },
+            "he": { reds: "יינות אדומים", whites: "יינות לבנים", roses: "יינות רוזה", sparkling: "יינות מבעבעים" },
+            "fa": { reds: "شراب‌های قرمز", whites: "شراب‌های سفید", roses: "شراب‌های رزه", sparkling: "شراب‌های گازدار" }
+        };
+
+        // --- TRADUZIONI COMPLETE CIBO (AGGORNATO DA PDF) ---
+        const menuData = {
+            "it": {
+                title: "Il Nostro Menù",
+                categories: [
+                    { name: "Antipasti", items: [
+                        { name: "Purea di fave con cicoria e cipolla rossa", price: "€11" }, { name: "Burrata in crosta di tarallo con capocollo croccante e pesto di pomodori secchi", price: "€12" },
+                        { name: "Fonduta di caciocavallo con scapece di verdure", price: "€12" }, { name: "Polpette e brasciola di carni locali al sugo", price: "€14" },
+                        { name: "Battuta di vitello con tuorlo marinato e senape", price: "€15" }
+                    ]},
+                    { name: "Primi", items: [
+                        { name: "Orecchiette Senatore Cappelli con cime di rape, pomodorino fresco, acciughe e pane croccante", price: "€12" }, { name: "Maritati Senatore Cappelli al sugo con brasciola", price: "€14" },
+                        { name: "Fusillone di pasta fresca al pesto di rucola, stracciatella e mandorla tostata", price: "€14" }, { name: "Gnocchi di patate con peperoni, salsiccia a punta di coltello, crema di pecorino e tarallo sbriciolato", price: "€15" }
+                    ]},
+                    { name: "Secondi alla Brace", items: [
+                        { name: "Salsiccia zampina con patate al forno o cicoria", price: "€15" }, { name: "Bombette con patate al forno o cicoria", price: "€16" },
+                        { name: "Tagliata di pollo marinato con patate al forno", price: "€16" }, { name: "Selezioni di carni rosse locali", price: "€/all'etto" }
+                    ]},
+                    { name: "Contorni", items: [
+                        { name: "Patate al forno", price: "€6" }, { name: "Cicoria ripassata", price: "€6" }, { name: "Mix di verdure al forno", price: "€6" }
+                    ]},
+                    { name: "Dolci", items: [
+                        { name: "Tiramisù al San Marzano", price: "€7" }, { name: "Lemon pie con frutti rossi", price: "€7" },
+                        { name: "Brownie con dulce de leche", price: "€7" }, { name: "Semifreddo artigianale", price: "€7" },
+                        { name: "Spuma di ricotta al lime con mandorle croccanti, lemon curd e frutti rossi", price: "€7" }
+                    ]}
+                ], info: { cover: "Coperto €3", allergy: "Si prega di informare lo staff di eventuali allergie o intolleranze" }
+            },
+            "en": {
+                title: "Our Menu",
+                categories: [
+                    { name: "Starters", items: [
+                        { name: "Broad bean purée with chicory and red onion", price: "€11" }, { name: "Burrata in tarallo crust with crispy capocollo and sun-dried tomato pesto", price: "€12" },
+                        { name: "Caciocavallo cheese fondue with marinated vegetables", price: "€12" }, { name: "Local meatballs and meat roll (brasciola) in tomato sauce", price: "€14" },
+                        { name: "Veal tartare with marinated egg yolk and mustard", price: "€15" }
+                    ]},
+                    { name: "Pasta Dishes", items: [
+                        { name: "Senator Cappelli orecchiette with turnip greens, fresh cherry tomatoes, anchovies and crispy bread", price: "€12" }, { name: "Senator Cappelli maritati pasta in tomato sauce with meat roll", price: "€14" },
+                        { name: "Fresh fusillone pasta with rocket pesto, stracciatella and toasted almonds", price: "€14" }, { name: "Potato gnocchi with peppers, local sausage, pecorino cream and crumbled tarallo", price: "€15" }
+                    ]},
+                    { name: "From the Grill", items: [
+                        { name: "Local 'Zampina' sausage with roasted potatoes or chicory", price: "€15" }, { name: "Grilled 'Bombette' meat rolls with roasted potatoes or chicory", price: "€16" },
+                        { name: "Marinated chicken tagliata with roasted potatoes", price: "€16" }, { name: "Selection of local red meats", price: "€/100g" }
+                    ]},
+                    { name: "Side Dishes", items: [
+                        { name: "Roasted potatoes", price: "€6" }, { name: "Sautéed chicory", price: "€6" }, { name: "Mixed roasted vegetables", price: "€6" }
+                    ]},
+                    { name: "Desserts", items: [
+                        { name: "San Marzano Tiramisu", price: "€7" }, { name: "Lemon pie with red berries", price: "€7" },
+                        { name: "Brownie with dulce de leche", price: "€7" }, { name: "Artisanal semifreddo", price: "€7" },
+                        { name: "Lime ricotta foam with crunchy almonds, lemon curd and red berries", price: "€7" }
+                    ]}
+                ], info: { cover: "Cover charge €3", allergy: "Please inform the staff of any allergies" }
+            },
+            "es": {
+                title: "Nuestro Menú",
+                categories: [
+                    { name: "Entrantes", items: [
+                        { name: "Puré de habas con achicoria y cebolla roja", price: "€11" }, { name: "Burrata en costra de tarallo con capocollo crujiente y pesto de tomates secos", price: "€12" },
+                        { name: "Fondue de queso caciocavallo con verduras marinadas", price: "€12" }, { name: "Albóndigas y 'brasciola' de carnes locales en salsa", price: "€14" },
+                        { name: "Carpaccio de ternera con yema de huevo marinado y mostaza", price: "€15" }
+                    ]},
+                    { name: "Pastas", items: [
+                        { name: "Orecchiette Senatore Cappelli con brotes de nabo, tomates cherry, anchoas y pan crujiente", price: "€12" }, { name: "Pasta maritati Senatore Cappelli con salsa y 'brasciola'", price: "€14" },
+                        { name: "Fusillone de pasta fresca con pesto de rúcula, stracciatella y almendras tostadas", price: "€14" }, { name: "Gnocchi de patata con pimientos, salchicha local, crema de pecorino y tarallo desmenuzado", price: "€15" }
+                    ]},
+                    { name: "A la Brasa", items: [
+                        { name: "Salchicha zampina con patatas al horno o achicoria", price: "€15" }, { name: "Bombette con patatas al horno o achicoria", price: "€16" },
+                        { name: "Tagliata de pollo marinado con patatas al horno", price: "€16" }, { name: "Selección de carnes rojas locales", price: "€/100g" }
+                    ]},
+                    { name: "Guarniciones", items: [
+                        { name: "Patatas al horno", price: "€6" }, { name: "Achicoria salteada", price: "€6" }, { name: "Verduras mixtas al horno", price: "€6" }
+                    ]},
+                    { name: "Postres", items: [
+                        { name: "Tiramisú al San Marzano", price: "€7" }, { name: "Lemon pie con frutos rojos", price: "€7" },
+                        { name: "Brownie con dulce de leche", price: "€7" }, { name: "Semifrío artesanal", price: "€7" },
+                        { name: "Espuma de ricota a la lima con almendras, lemon curd y frutos rojos", price: "€7" }
+                    ]}
+                ], info: { cover: "Cubierto €3", allergy: "Informe al personal de cualquier alergia" }
+            },
+            "fr": {
+                title: "Notre Menu",
+                categories: [
+                    { name: "Entrées", items: [
+                        { name: "Purée de fèves avec chicorée et oignon rouge", price: "€11" }, { name: "Burrata en croûte de tarallo, capocollo croustillant, pesto de tomates séchées", price: "€12" },
+                        { name: "Fondue de caciocavallo avec légumes marinés", price: "€12" }, { name: "Boulettes et 'brasciola' de viandes locales en sauce", price: "€14" },
+                        { name: "Tartare de veau avec jaune d'œuf mariné et moutarde", price: "€15" }
+                    ]},
+                    { name: "Pâtes", items: [
+                        { name: "Orecchiette avec fanes de navet, tomates cerises, anchois et pain croustillant", price: "€12" }, { name: "Pâtes maritati en sauce avec 'brasciola'", price: "€14" },
+                        { name: "Fusillone de pâtes fraîches au pesto de roquette, stracciatella et amandes grillées", price: "€14" }, { name: "Gnocchi de pommes de terre, poivrons, saucisse locale, crème de pecorino et tarallo émietté", price: "€15" }
+                    ]},
+                    { name: "Grillades", items: [
+                        { name: "Saucisse 'zampina' avec pommes de terre au four ou chicorée", price: "€15" }, { name: "Bombette avec pommes de terre au four ou chicorée", price: "€16" },
+                        { name: "Tagliata de poulet mariné avec pommes de terre au four", price: "€16" }, { name: "Sélection de viandes rouges locales", price: "€/100g" }
+                    ]},
+                    { name: "Accompagnements", items: [
+                        { name: "Pommes de terre au four", price: "€6" }, { name: "Chicorée sautée", price: "€6" }, { name: "Légumes rôtis mixtes", price: "€6" }
+                    ]},
+                    { name: "Desserts", items: [
+                        { name: "Tiramisu au San Marzano", price: "€7" }, { name: "Lemon pie avec fruits rouges", price: "€7" },
+                        { name: "Brownie au dulce de leche", price: "€7" }, { name: "Semifreddo artisanal", price: "€7" },
+                        { name: "Mousse de ricotta au citron vert, amandes, lemon curd et fruits rouges", price: "€7" }
+                    ]}
+                ], info: { cover: "Couvert €3", allergy: "Veuillez informer le personnel de toute allergie" }
+            },
+            "de": {
+                title: "Unser Menü",
+                categories: [
+                    { name: "Vorspeisen", items: [
+                        { name: "Ackerbohnenpüree mit Zichorie und roter Zwiebel", price: "€11" }, { name: "Burrata in Tarallo-Kruste mit knusprigem Capocollo und Tomatenpesto", price: "€12" },
+                        { name: "Caciocavallo-Käsefondue mit mariniertem Gemüse", price: "€12" }, { name: "Fleischbällchen und 'Brasciola' in Tomatensauce", price: "€14" },
+                        { name: "Kalbstatar mit mariniertem Eigelb und Senf", price: "€15" }
+                    ]},
+                    { name: "Pasta-Gerichte", items: [
+                        { name: "Orecchiette mit Stängelkohl, Kirschtomaten, Sardellen und knusprigem Brot", price: "€12" }, { name: "Maritati-Pasta in Fleischsauce mit 'Brasciola'", price: "€14" },
+                        { name: "Frische Fusillone mit Rucola-Pesto, Stracciatella und gerösteten Mandeln", price: "€14" }, { name: "Kartoffel-Gnocchi mit Paprika, lokaler Wurst, Pecorino-Creme und Tarallo-Bröseln", price: "€15" }
+                    ]},
+                    { name: "Vom Grill", items: [
+                        { name: "'Zampina'-Wurst mit Ofenkartoffeln oder Zichorie", price: "€15" }, { name: "'Bombette'-Fleischröllchen mit Ofenkartoffeln oder Zichorie", price: "€16" },
+                        { name: "Mariniertes Hähnchen-Tagliata mit Ofenkartoffeln", price: "€16" }, { name: "Auswahl an lokalen roten Fleischsorten", price: "€/100g" }
+                    ]},
+                    { name: "Beilagen", items: [
+                        { name: "Ofenkartoffeln", price: "€6" }, { name: "Gedünstete Zichorie", price: "€6" }, { name: "Gemischtes Ofengemüse", price: "€6" }
+                    ]},
+                    { name: "Desserts", items: [
+                        { name: "San Marzano Tiramisu", price: "€7" }, { name: "Zitronenkuchen mit roten Früchten", price: "€7" },
+                        { name: "Brownie mit Dulce de Leche", price: "€7" }, { name: "Hausgemachtes Semifreddo", price: "€7" },
+                        { name: "Limetten-Ricotta-Schaum mit Mandeln, Lemon Curd und roten Früchten", price: "€7" }
+                    ]}
+                ], info: { cover: "Gedeck €3", allergy: "Bitte informieren Sie das Personal über Allergien" }
+            },
+            "nl": {
+                title: "Ons Menu",
+                categories: [
+                    { name: "Voorgerechten", items: [
+                        { name: "Tuinbonenpuree met cichorei en rode ui", price: "€11" }, { name: "Burrata in tarallo-korst met knapperige capocollo en zongedroogde tomatenpesto", price: "€12" },
+                        { name: "Caciocavallo kaasfondue met gemarineerde groenten", price: "€12" }, { name: "Gehaktballetjes en 'brasciola' in tomatensaus", price: "€14" },
+                        { name: "Kalfstartaar met gemarineerd eigeel en mosterd", price: "€15" }
+                    ]},
+                    { name: "Pasta Gerechten", items: [
+                        { name: "Orecchiette met raapstelen, kerstomaatjes, ansjovis en knapperig brood", price: "€12" }, { name: "Maritati pasta in tomatensaus met 'brasciola'", price: "€14" },
+                        { name: "Verse fusillone met rucolapesto, stracciatella en geroosterde amandelen", price: "€14" }, { name: "Aardappelgnocchi met paprika, lokale worst, pecorinocrème en tarallo-kruimels", price: "€15" }
+                    ]},
+                    { name: "Van de Grill", items: [
+                        { name: "'Zampina' worst met gebakken aardappelen of cichorei", price: "€15" }, { name: "'Bombette' vleesrolletjes met gebakken aardappelen of cichorei", price: "€16" },
+                        { name: "Gemarineerde kip tagliata met gebakken aardappelen", price: "€16" }, { name: "Selectie van lokaal rood vlees", price: "€/100g" }
+                    ]},
+                    { name: "Bijgerechten", items: [
+                        { name: "Gebakken aardappelen", price: "€6" }, { name: "Gesauteerde cichorei", price: "€6" }, { name: "Gemengde ovengroenten", price: "€6" }
+                    ]},
+                    { name: "Desserts", items: [
+                        { name: "San Marzano Tiramisu", price: "€7" }, { name: "Citroentaart met rode vruchten", price: "€7" },
+                        { name: "Brownie met dulce de leche", price: "€7" }, { name: "Ambachtelijke semifreddo", price: "€7" },
+                        { name: "Limoen-ricottaschuim met amandelen, lemon curd en rode vruchten", price: "€7" }
+                    ]}
+                ], info: { cover: "Couvert €3", allergy: "Informeer het personeel over eventuele allergieën" }
+            },
+            "ru": {
+                title: "Наше Меню",
+                categories: [
+                    { name: "Закуски", items: [
+                        { name: "Пюре из бобов фава с цикорием и красным луком", price: "€11" }, { name: "Буррата в корочке таралло с хрустящим капоколло и песто из вяленых томатов", price: "€12" },
+                        { name: "Фондю из сыра качокавалло с маринованными овощами", price: "€12" }, { name: "Фрикадельки и 'брашола' в томатном соусе", price: "€14" },
+                        { name: "Тартар из телятины с маринованным желтком и горчицей", price: "€15" }
+                    ]},
+                    { name: "Паста", items: [
+                        { name: "Орекьетте с ботвой репы, томатами черри, анчоусами и хрустящим хлебом", price: "€12" }, { name: "Паста маритати в томатном соусе с брашолой", price: "€14" },
+                        { name: "Свежие фузиллоне с песто из рукколы, страччателлой и жареным миндалем", price: "€14" }, { name: "Картофельные ньокки с перцем, местной колбасой, кремом из пекорино и крошкой таралло", price: "€15" }
+                    ]},
+                    { name: "На гриле", items: [
+                        { name: "Колбаска 'Дзампина' с запеченным картофелем или цикорием", price: "€15" }, { name: "Мясные рулетики 'бомбетте' с запеченным картофелем или цикорием", price: "€16" },
+                        { name: "Маринованная куриная тальята с запеченным картофелем", price: "€16" }, { name: "Выбор местного красного мяса", price: "€/100г" }
+                    ]},
+                    { name: "Гарниры", items: [
+                        { name: "Запеченный картофель", price: "€6" }, { name: "Обжаренный цикорий", price: "€6" }, { name: "Ассорти овощей в духовке", price: "€6" }
+                    ]},
+                    { name: "Десерты", items: [
+                        { name: "Тирамису Сан-Марцано", price: "€7" }, { name: "Лимонный пай с ягодами", price: "€7" },
+                        { name: "Брауни с дульсе де лече", price: "€7" }, { name: "Домашнее семифредо", price: "€7" },
+                        { name: "Лаймовый мусс из рикотты с миндалем, лимонным курдом и ягодами", price: "€7" }
+                    ]}
+                ], info: { cover: "Обслуживание €3", allergy: "Пожалуйста, сообщите о наличии аллергии" }
+            },
+            "zh": {
+                title: "我们的菜单",
+                categories: [
+                    { name: "前菜", items: [
+                        { name: "蚕豆泥配菊苣和红洋葱", price: "€11" }, { name: "塔拉洛饼干碎包裹布拉塔奶酪配脆皮卡波科洛和晒干番茄酱", price: "€12" },
+                        { name: "卡乔卡瓦洛奶酪火锅配腌菜", price: "€12" }, { name: "番茄酱本地肉丸和肉卷", price: "€14" },
+                        { name: "小牛肉鞑靼配腌蛋黄和芥末", price: "€15" }
+                    ]},
+                    { name: "主食/意面", items: [
+                        { name: "猫耳朵意面配芜菁叶、新鲜樱桃番茄、凤尾鱼和脆面包", price: "€12" }, { name: "番茄肉卷酱汁混合意面", price: "€14" },
+                        { name: "新鲜大螺旋面配芝麻菜酱、丝滑奶酪和烤杏仁", price: "€14" }, { name: "土豆团配甜椒、本地香肠、佩科里诺奶酪酱和塔拉洛碎", price: "€15" }
+                    ]},
+                    { name: "炭烤类", items: [
+                        { name: "本地香肠配烤土豆或菊苣", price: "€15" }, { name: "爆浆肉卷配烤土豆或菊苣", price: "€16" },
+                        { name: "腌制烤鸡排配烤土豆", price: "€16" }, { name: "精选本地红肉", price: "€/100克" }
+                    ]},
+                    { name: "配菜", items: [
+                        { name: "烤土豆", price: "€6" }, { name: "煸炒菊苣", price: "€6" }, { name: "时令烤蔬菜", price: "€6" }
+                    ]},
+                    { name: "甜点", items: [
+                        { name: "圣马尔扎诺提拉米苏", price: "€7" }, { name: "红浆果柠檬派", price: "€7" },
+                        { name: "焦糖牛奶布朗尼", price: "€7" }, { name: "手工半冷冰淇淋", price: "€7" },
+                        { name: "青柠里科塔慕斯配脆杏仁、柠檬酱和红浆果", price: "€7" }
+                    ]}
+                ], info: { cover: "服务费 €3", allergy: "如果您有任何过敏，请告知工作人员" }
+            },
+            "ja": {
+                title: "メニュー",
+                categories: [
+                    { name: "前菜", items: [
+                        { name: "そら豆のピューレ、チコリと赤玉ねぎ添え", price: "€11" }, { name: "ブッラータのタラッロ包み、カリカリのカポコッロとドライトマトのペスト", price: "€12" },
+                        { name: "カチョカヴァッロのフォンデュ、野菜のマリネ添え", price: "€12" }, { name: "地元産肉のミートボールとブラショーラ、トマトソース", price: "€14" },
+                        { name: "子牛肉のタルタル、卵黄のマリネとマスタード添え", price: "€15" }
+                    ]},
+                    { name: "パスタ", items: [
+                        { name: "オレキエッテ、菜の花、チェリートマト、アンチョビ、カリカリパン", price: "€12" }, { name: "マリターティ、ブラショーラのトマトソース", price: "€14" },
+                        { name: "フレッシュ・フズィッローネ、ルッコラのジェノベーゼとストラッチャテッラ", price: "€14" }, { name: "ジャガイモのニョッキ、パプリカ、地元産ソーセージ、ペコリーノソース", price: "€15" }
+                    ]},
+                    { name: "炭火焼き", items: [
+                        { name: "ザンピーナ・ソーセージ、ローストポテトまたはチコリ添え", price: "€15" }, { name: "ボンベッテ（肉巻き）、ローストポテトまたはチコリ添え", price: "€16" },
+                        { name: "鶏肉のタリアータ、ローストポテト添え", price: "€16" }, { name: "地元産赤身肉の厳選", price: "€/100g" }
+                    ]},
+                    { name: "サイドメニュー", items: [
+                        { name: "ローストポテト", price: "€6" }, { name: "チコリのソテー", price: "€6" }, { name: "季節野菜のオーブン焼き", price: "€6" }
+                    ]},
+                    { name: "デザート", items: [
+                        { name: "サン・マルツァーノのティラミス", price: "€7" }, { name: "ベリーのレモンパイ", price: "€7" },
+                        { name: "ブラウニー、ドゥルセ・デ・レチェ", price: "€7" }, { name: "職人仕立てのセミフレッド", price: "€7" },
+                        { name: "ライムのリコッタムース、カリカリアーモンドとベリー", price: "€7" }
+                    ]}
+                ], info: { cover: "コペルト（席料） €3", allergy: "アレルギーについてはスタッフにお知らせください" }
+            },
+            "ko": {
+                title: "메뉴",
+                categories: [
+                    { name: "에피타이저", items: [
+                        { name: "치커리와 적양파를 곁들인 파바빈 퓌레", price: "€11" }, { name: "바삭한 카포콜로와 썬드라이 토마토 페스토를 곁들인 타랄로 빵가루 입힌 부라타", price: "€12" },
+                        { name: "마리네이드 야채를 곁들인 카초카발로 치즈 퐁듀", price: "€12" }, { name: "토마토 소스의 현지 미트볼과 고기말이(브라쇼라)", price: "€14" },
+                        { name: "마리네이드한 계란 노른자와 머스타드를 곁들인 송아지 타르타르", price: "€15" }
+                    ]},
+                    { name: "파스타", items: [
+                        { name: "무청, 체리 토마토, 엔초비, 바삭한 빵을 곁들인 오레키에테", price: "€12" }, { name: "브라쇼라 토마토 소스의 마리타티 파스타", price: "€14" },
+                        { name: "루꼴라 페스토, 스트라차텔라, 구운 아몬드를 곁들인 생면 푸질로네", price: "€14" }, { name: "피망, 현지 소시지, 페코리노 크림을 곁들인 감자 뇨끼", price: "€15" }
+                    ]},
+                    { name: "그릴 요리", items: [
+                        { name: "잠피나 소시지와 구운 감자 또는 치커리", price: "€15" }, { name: "봄베테(고기말이)와 구운 감자 또는 치커리", price: "€16" },
+                        { name: "마리네이드한 치킨 타글리아타와 구운 감자", price: "€16" }, { name: "현지 엄선 적색육", price: "€/100g" }
+                    ]},
+                    { name: "사이드 메뉴", items: [
+                        { name: "구운 감자", price: "€6" }, { name: "볶은 치커리", price: "€6" }, { name: "모둠 야채 오븐 구이", price: "€6" }
+                    ]},
+                    { name: "디저트", items: [
+                        { name: "산 마르자노 티라미수", price: "€7" }, { name: "레몬 파이와 베리", price: "€7" },
+                        { name: "브라우니와 돌체 데 레체", price: "€7" }, { name: "수제 세미프레도", price: "€7" },
+                        { name: "라임 리코타 무스와 바삭한 아몬드, 베리", price: "€7" }
+                    ]}
+                ], info: { cover: "상차림비 €3", allergy: "알레르기가 있는 경우 직원에게 알려주세요" }
+            },
+            "he": {
+                title: "התפריט שלנו",
+                categories: [
+                    { name: "מנות ראשונות", items: [
+                        { name: "פירה פול עם עולש ובצל אדום", price: "€11" }, { name: "בוראטה במעטפת טראלו עם קפוקולו פריך ופסטו עגבניות מיובשות", price: "€12" },
+                        { name: "פונדו גבינת קצ'וקוואלו עם ירקות כבושים", price: "€12" }, { name: "כדורי בשר וברשולה ברוטב עגבניות", price: "€14" },
+                        { name: "טרטר עגל עם חלמון כבוש וחרדל", price: "€15" }
+                    ]},
+                    { name: "פסטות", items: [
+                        { name: "אורקייטה עם עלי לפת, עגבניות שרי, אנשובי ולחם פריך", price: "€12" }, { name: "פסטה מריטאטי ברוטב עגבניות עם ברשולה", price: "€14" },
+                        { name: "פוזילונה טרי עם פסטו רוקולה, סטרצ'טלה ושקדים קלויים", price: "€14" }, { name: "ניוקי תפוחי אדמה עם פלפלים, נקניקייה מקומית וקרם פקורינו", price: "€15" }
+                    ]},
+                    { name: "מהגריל", items: [
+                        { name: "נקניקיית זמפינה עם תפוחי אדמה אפויים או עולש", price: "€15" }, { name: "בומבטה (גלילי בשר) עם תפוחי אדמה אפויים או עולש", price: "€16" },
+                        { name: "נתחי עוף במרינדה עם תפוחי אדמה אפויים", price: "€16" }, { name: "מבחר בשרים אדומים מקומיים", price: "€/100 גרם" }
+                    ]},
+                    { name: "תוספות", items: [
+                        { name: "תפוחי אדמה אפויים", price: "€6" }, { name: "עולש מוקפץ", price: "€6" }, { name: "ירקות אפויים מעורבים", price: "€6" }
+                    ]},
+                    { name: "קינוחים", items: [
+                        { name: "טירמיסו סן מרזאנו", price: "€7" }, { name: "פאי לימון עם פירות יער", price: "€7" },
+                        { name: "בראוניז עם ריבת חלב", price: "€7" }, { name: "סמיפרדו ארטיזנלי", price: "€7" },
+                        { name: "מוס ריקוטה ליים עם שקדים פריכים ופירות יער", price: "€7" }
+                    ]}
+                ], info: { cover: "דמי עריכה €3", allergy: "נא לעדכן את הצוות על אלרגיות" }
+            },
+            "fa": {
+                title: "منوی ما",
+                categories: [
+                    { name: "پیش‌غذا", items: [
+                        { name: "پوره باقلا با کاسنی و پیاز قرمز", price: "€11" }, { name: "بوراتا با پوسته تارالو، کاپوکولو ترد و پستو گوجه خشک", price: "€12" },
+                        { name: "فوندوی پنیر کاچوکاوالو با سبزیجات ترشی", price: "€12" }, { name: "کوفته و براشیولا در سس گوجه‌فرنگی", price: "€14" },
+                        { name: "تارتار گوساله با زرده تخم‌مرغ و خردل", price: "€15" }
+                    ]},
+                    { name: "پاستا", items: [
+                        { name: "اورکیته با برگ شلغم، گوجه گیلاسی، آنچوی و نان ترد", price: "€12" }, { name: "پاستا ماریتاتی در سس گوجه‌فرنگی با براشیولا", price: "€14" },
+                        { name: "فوزیلونه تازه با پستو روکولا، پنیر استراچاتلا و بادام سوخته", price: "€14" }, { name: "نیوکی سیب‌زمینی با فلفل، سوسیس محلی و خامه پنیر پکورینو", price: "€15" }
+                    ]},
+                    { name: "گریل", items: [
+                        { name: "سوسیس زامپینا با سیب‌زمینی تنوری یا کاسنی", price: "€15" }, { name: "بومبته با سیب‌زمینی تنوری یا کاسنی", price: "€16" },
+                        { name: "تالیاتای مرغ با سیب‌زمینی تنوری", price: "€16" }, { name: "انتخابی از گوشت‌های قرمز محلی", price: "€/۱۰۰ گرم" }
+                    ]},
+                    { name: "مخلفات", items: [
+                        { name: "سیب‌زمینی تنوری", price: "€6" }, { name: "کاسنی تفت داده شده", price: "€6" }, { name: "میکس سبزیجات تنوری", price: "€6" }
+                    ]},
+                    { name: "دسرها", items: [
+                        { name: "تیرامیسو سن مارزانو", price: "€7" }, { name: "پای لیمو با میوه‌های قرمز", price: "€7" },
+                        { name: "براونی با دولسه ده لچه", price: "€7" }, { name: "سمی‌فردو دست‌ساز", price: "€7" },
+                        { name: "فوم ریکوتا لیمو با بادام ترد و میوه‌های قرمز", price: "€7" }
+                    ]}
+                ], info: { cover: "حق سرویس €3", allergy: "لطفاً در مورد آلرژی به پرسنل اطلاع دهید" }
+            }
+        };
+
+        // Aggiornamento per lingue derivate (AR/CL/PT/FI ecc)
+        menuData["es-AR"] = JSON.parse(JSON.stringify(menuData["es"]));
+        menuData["es-AR"].categories[0].name = "Entradas";
+        menuData["es-CL"] = JSON.parse(JSON.stringify(menuData["es"]));
+        menuData["es-CL"].categories[0].name = "Para Empezar";
+
+        menuData["pt"] = JSON.parse(JSON.stringify(menuData["es"]));
+        menuData["pt-BR"] = JSON.parse(JSON.stringify(menuData["es"]));
+        menuData["fi"] = JSON.parse(JSON.stringify(menuData["en"]));
+
+        function renderMenu(lang) {
+            const data = menuData[lang] || menuData['en']; 
+            document.title = "Casa San Giacomo - " + data.title;
+            document.getElementById('main-subtitle').textContent = data.title;
+            const container = document.getElementById('menu-container');
+            const footerContainer = document.getElementById('footer-container');
+            container.innerHTML = '';
+            footerContainer.innerHTML = '';
+
+            let allCategories = JSON.parse(JSON.stringify(data.categories));
+            const wineTrans = wineCategories[lang] || wineCategories['en'];
+            wineListDatabase.forEach(wineCategory => {
+                allCategories.push({
+                    name: wineTrans[wineCategory.id],
+                    items: wineCategory.items
+                });
+            });
+
+            allCategories.forEach((category, index) => {
+                const categoryDiv = document.createElement('div');
+                categoryDiv.className = 'category';
+                categoryDiv.style.animationDelay = `${index * 0.1}s`; 
+                const catTitle = document.createElement('h2');
+                catTitle.className = 'category-title';
+                catTitle.textContent = category.name;
+                categoryDiv.appendChild(catTitle);
+
+                category.items.forEach(item => {
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = 'menu-item';
+                    const itemDetails = document.createElement('div');
+                    itemDetails.className = 'item-details';
+                    const textContainer = document.createElement('div');
+                    const itemName = document.createElement('span');
+                    itemName.className = 'item-name';
+                    itemName.textContent = item.name;
+                    textContainer.appendChild(itemName);
+                    if (item.desc) {
+                        const itemDesc = document.createElement('span');
+                        itemDesc.className = 'item-desc';
+                        itemDesc.textContent = item.desc;
+                        textContainer.appendChild(itemDesc);
+                    }
+                    itemDetails.appendChild(textContainer);
+                    itemDiv.appendChild(itemDetails);
+                    if (item.price) {
+                        const itemPrice = document.createElement('span');
+                        itemPrice.className = 'item-price';
+                        itemPrice.textContent = item.price;
+                        itemDiv.appendChild(itemPrice);
+                    }
+                    categoryDiv.appendChild(itemDiv);
+                });
+                container.appendChild(categoryDiv);
+            });
+
+            if(data.info) {
+                footerContainer.innerHTML = `
+                    <div class="menu-footer">
+                        <p>${data.info.cover}</p>
+                        <p><em>${data.info.allergy}</em></p>
+                        <div class="wifi-box">Wi-Fi Password: <strong>Bixio456</strong></div>
+                    </div>
+                `;
+            }
+
+            const isRTL = lang === 'he' || lang === 'fa';
+            document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
+            document.documentElement.lang = lang;
+            document.getElementById('lang-select').value = lang;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const browserLang = navigator.language.substring(0, 2);
+            const initialLang = menuData[browserLang] ? browserLang : 'it';
+            renderMenu(initialLang);
+
+            document.getElementById('lang-select').addEventListener('change', (e) => {
+                renderMenu(e.target.value);
+            });
+        });
+    </script>
+</body>
+</html>
